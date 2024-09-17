@@ -9,9 +9,9 @@ import prisma from '@/lib/db';
 // You'll need to import and pass this
 // to `NextAuth` in `app/api/auth/[...nextauth]/route.ts`
 export const config = {
-	// pages: {
-	// 	signIn: '/login',
-	// },
+	pages: {
+		signIn: '/login',
+	},
 	session: {
 		strategy: 'jwt',
 		// 15 days
