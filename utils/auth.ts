@@ -31,6 +31,9 @@ export const config = {
       },
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async authorize(credentials, _) {
+        try {
+          
+
         // You need to provide your own logic here that takes the credentials
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
@@ -67,6 +70,10 @@ export const config = {
         }
         // Return null if user data could not be retrieved
         return null;
+      } catch (error) {
+          console.error(error);
+          return null
+      }
       },
     }),
   ],
