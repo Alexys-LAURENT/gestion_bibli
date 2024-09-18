@@ -65,7 +65,7 @@ export const config = {
             zip: user.zip,
             city: user.city,
             country: user.country,
-            id_admin: user.is_admin,
+            is_admin: user.is_admin,
           } as unknown as User;
         }
         // Return null if user data could not be retrieved
@@ -82,7 +82,7 @@ export const config = {
       if (user) {
 				token = {
 					...token,
-					id_admin: (user as unknown as any).id_admin,
+					is_admin: (user as unknown as any).is_admin,
           firstname: (user as unknown as any).firstname,
           lastname: (user as unknown as any).lastname,
           birth_date: (user as unknown as any).birth_date,
@@ -97,7 +97,7 @@ export const config = {
     },
     async session({ session, token }) {
 			if (token) {
-				(session as any).user = { ...session.user, id_admin: token.id_admin,
+				(session as any).user = { ...session.user, is_admin: token.is_admin,
         firstname: token.firstname,
         lastname: token.lastname,
         birth_date: token.birth_date,
