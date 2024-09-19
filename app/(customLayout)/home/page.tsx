@@ -1,4 +1,5 @@
 import {Tabs, Tab} from "@nextui-org/tabs";
+import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
 
 const Page = () => {
   return (
