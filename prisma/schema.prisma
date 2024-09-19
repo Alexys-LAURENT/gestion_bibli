@@ -14,7 +14,7 @@ model authors {
 }
 
 model books {
-  id_book          Int              @id @default(autoincrement())
+  id_book           Int              @id @default(autoincrement())
   id_author        Int
   title            String           @db.Text
   year_publication Int
