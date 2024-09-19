@@ -1,13 +1,16 @@
-import { Button } from "@nextui-org/react";
+import Books_Rent from "@/components/TabsBooks";
 
-const Page = () => {
+
+const Page = async () => {
+
   return (
-    <div style={{ display: 'flex', gap: '10px' }}>
-      <Button color="primary">On-going</Button>
+    
+      <div className="flex space-x-4">
+        <Books_Rent/>
 
-      <Button color="primary">Done</Button>
-    </div>
-  );
-};
+      </div>
 
-export default Page;
+    );
+  };
+  
+  export default Page;
