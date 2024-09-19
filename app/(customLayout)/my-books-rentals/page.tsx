@@ -1,10 +1,16 @@
+import Books_Rent from "@/components/TabsBooks";
 
-const Page = () => {
+
+const Page = async () => {
+
   return (
-    <div>
-      My Books Rentals
-    </div>
-  );
-};
+    
+      <div className="flex space-x-4">
+        <Books_Rent/>
 
-export default Page;
+      </div>
+
+    );
+  };
+  
+  export default Page;
