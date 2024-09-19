@@ -1,14 +1,10 @@
-import {Tabs, Tab} from "@nextui-org/tabs";
-import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
+import TabsHome from "@/components/HomePage/TabsHome";
 
 const Page = () => {
   return (
     <div>
       <div className='w-4/6 flex bg-white gap-4 p-4 rounded-xl'>
-        <Tabs aria-label="Options">
-          <Tab key="foryou" title="For You"/>
-          <Tab key="mostreservedbooks" title="Most reserved books"/>
-        </Tabs>
+        <TabsHome/>
       </div>
     </div>
   );
