@@ -9,27 +9,27 @@ datasource db {
 
 model authors {
   id_author   Int     @id @default(autoincrement())
-  name_author String  @db.VarChar(255)
+  name_author String  @unique @db.VarChar(255)
   books       books[]
 }
 
 model books {
   id_book           Int              @id @default(autoincrement())
-  id_author         Int
-  title             String           @db.VarChar(255)
-  year_publication  Int
-  first_sentence    String?
-  image_url         String?           @db.VarChar(255)
-  is_loan           Boolean?         @default(false)
-  authors           authors          @relation(fields: [id_author], references: [id_author], onDelete: NoAction, onUpdate: NoAction)
-  books_subjects    books_subjects[]
-  loan              loan[]
+  id_author        Int
+  title            String           @db.Text
+  year_publication Int
+  first_sentence   String?          @db.Text
+  image_url        String?          @db.VarChar(255)
+  is_loan          Boolean?         @default(false)
+  authors          authors          @relation(fields: [id_author], references: [id_author], onDelete: NoAction, onUpdate: NoAction)
+  books_subjects   books_subjects[]
+  loan             loan[]
 }
 
 model books_subjects {
   id_book    Int
   id_subject Int
-  books      books    @relation(fields: [id_book], references: [id_book], onDelete: NoAction, onUpdate: NoAction)
+  books      books    @relation(fields: [id_book], references: [id_book], onDelete: Cascade, onUpdate: Cascade)
   subjects   subjects @relation(fields: [id_subject], references: [id_subject], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([id_book, id_subject])
@@ -40,29 +40,29 @@ model loan {
   id_book   Int
   loan_date DateTime @db.Date
   is_return Boolean? @default(false)
-  books     books    @relation(fields: [id_book], references: [id_book], onDelete: NoAction, onUpdate: NoAction)
-  users     users    @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+  books     books    @relation(fields: [id_book], references: [id_book], onDelete: Cascade, onUpdate: Cascade)
+  users     users    @relation(fields: [id_user], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([id_user, id_book, loan_date])
 }
 
 model subjects {
   id_subject     Int              @id @default(autoincrement())
-  label          String           @db.VarChar(100)
+  label          String           @unique @db.VarChar(255)
   books_subjects books_subjects[]
 }
 
 model users {
   id_user    Int      @id @default(autoincrement())
-  firstname  String   @db.VarChar(100)
-  lastname   String   @db.VarChar(100)
+  firstname  String   @db.VarChar(255)
+  lastname   String   @db.VarChar(255)
   mail       String   @unique @db.VarChar(255)
   password   String   @db.VarChar(255)
   birth_date DateTime @db.Date
   address    String   @db.VarChar(255)
   zip        String   @db.VarChar(20)
-  city       String   @db.VarChar(100)
-  country    String   @db.VarChar(100)
+  city       String   @db.VarChar(255)
+  country    String   @db.VarChar(255)
   is_admin   Boolean? @default(false)
   loan       loan[]
 }

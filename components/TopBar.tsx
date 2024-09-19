@@ -8,7 +8,6 @@ import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/popover";
 import SignOutButton from './SignOutButton';
 const TopBar = async () => {
   const session = await auth()
-  console.log(session);
   
   return (
     <div className='flex justify-between items-center w-full px-4 bg-white'>
