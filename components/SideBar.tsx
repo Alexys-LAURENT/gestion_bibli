@@ -1,11 +1,11 @@
 "use client"
-import { BookmarkSquareIcon, Cog6ToothIcon, HomeIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { Bars3CenterLeftIcon, BookmarkSquareIcon, BookOpenIcon, Cog6ToothIcon, HomeIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-const SideBar = () => {
+const SideBar = ({is_admin}:{is_admin:boolean}) => {
   const pathName = usePathname();
   const links = [
     {
@@ -37,10 +37,35 @@ const SideBar = () => {
       icon: <QuestionMarkCircleIcon className='w-6 h-6' />,
     },
   ]
+
+  const adminLinks = [
+    {
+      name: 'Books',
+      href: '/admin/books',
+      icon: <BookOpenIcon className='w-6 h-6' />,
+    },
+    {
+      name: 'Rents',
+      href: '/admin/rents',
+      icon: <Bars3CenterLeftIcon className='w-6 h-6' />,
+    },
+  ]
   return (
     <nav className='flex flex-col gap-4 items-center px-5 h-full w-64 bg-white pt-5'>
       {
         links.map((link, index) => (
+          <Button
+          as={Link}
+          key={`
+          ${index}-${link.name}-${link.href}
+          `} href={link.href} className={`w-full justify-start rounded-lg bg-transparent hover:bg-gest_cta data-[hover=true]:text-white data-[hover=true]:opacity-100 ${pathName === link.href ? 'bg-gest_cta text-white' : ''} `}>
+            {link.icon}
+            <span className='font-semibold ml-1'>{link.name}</span>
+          </Button>
+        ))
+      }
+       {
+        is_admin && adminLinks.map((link, index) => (
           <Button
           as={Link}
           key={`
