@@ -1,8 +1,8 @@
 "use server"
 
 import prisma from "@/lib/db";
-import { BookType } from "@/types/AdminPages/entities";
-type Data = BookType & { name_author: string };
+import {  BookTypeWithAuthor } from "@/types/AdminPages/entities";
+type Data = BookTypeWithAuthor & { name_author: string };
 
 export async function addNewBook(data:Data){
   try {

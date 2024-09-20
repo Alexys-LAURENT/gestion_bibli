@@ -29,7 +29,7 @@ export async function getAllBooksPaginate(start:number, end:number, whereLike?:s
           },
         },
       });
-      books = await query;
+      books = (await query).slice(start, end);
     } else {
       query =  prisma.books.findMany({
         select:{

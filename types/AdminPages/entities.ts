@@ -8,6 +8,17 @@ export type BookType = {
   is_loan:boolean;
 }
 
+export type BookTypeWithAuthor = {
+  id_book:number;
+  title:string;
+  year_publication:number;
+  first_sentence:string | null;
+  image_url:string | null;
+  is_loan:boolean;
+  authors: AuthorType;
+}
+
+
 export type AuthorType = {
   id_author:number;
   name_author:string;
