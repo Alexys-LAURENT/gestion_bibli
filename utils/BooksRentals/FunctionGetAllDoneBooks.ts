@@ -5,16 +5,15 @@ import prisma from "@/lib/db";
 
 export async function FunctionGetAllDoneBooks() {
     try {
-    const books = await prisma.book.findMany({
+    const books = await prisma.loan.findMany({
         where: {
-            is_return: 'true',
+            is_return: true ,
         }
-        
+    });
 
-    })
-    .slice (0,20);
+    const limitedBooks = books.slice(0, 20);
     
-    return JSON.parse(JSON.stringify({ success: true, data: books }));
+    return JSON.parse(JSON.stringify({ success: true, data: limitedBooks }));
 
     } catch (error) {
         if (error instanceof Error) {
