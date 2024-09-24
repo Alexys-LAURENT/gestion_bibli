@@ -2,17 +2,17 @@
 import { Image } from "@nextui-org/image";
 
 // Interface mise à jour pour inclure les données de books en props
-export interface BooksArg {
+export interface BooksArgOD {
     id_user: number; //  Le Type des données de livres récupérées
-    books: any; // Type des données de livres récupérées
+    booksOnDoing: any; 
 }
 
-export default function GetBooksOnDoing({ books }: BooksArg) {
-    console.log(books); // Vérifiez la structure ici
+export default function GetBooksOnDoing({ booksOnDoing }: BooksArgOD) {
+    console.log(booksOnDoing); // Vérifiez la structure ici
 
     return (
         <div className='flex flex-wrap gap-4 py-4 w-full'>
-            {books.data && books.data.map((book: any) => (
+            {booksOnDoing.data && booksOnDoing.data.map((book: any) => (
                 <div key={book.books.id_book} className="flex flex-col items-center w-[120px] h-[250px]">
                     <div className="w-[120px] h-[180px] relative">
                         <Image

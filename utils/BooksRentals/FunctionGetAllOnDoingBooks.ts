@@ -15,7 +15,7 @@ export async function FunctionGetAllOnDoingBooks(id_user: number)  {
                     id_book: true,
                     title: true,
                     id_author: true,
-                        authors: {  // Utilisation de la relation 'author' pour récupérer les infos de l'auteur
+                        authors: {  // Utilisation de la relation 'authors' pour récupérer les infos de l'auteur
                             select: {
                                 name_author: true  
                             }
