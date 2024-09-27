@@ -17,7 +17,7 @@ const TabsBooks = ({ id_user, booksOnDoing, booksDone }: CombinedBooksArgs) => {
 
         selectedKey={tab}
         onSelectionChange={(key) => setTab(String(key))}
-        classNames={{ cursor: "bg-gest_cta", tab: "text-white" }}
+        classNames={{ cursor: "bg-gest_cta", tab: "text-white", panel:'bg-white h-full rounded-md'}}
         variant="light"
         aria-label="Options colors"
       >
