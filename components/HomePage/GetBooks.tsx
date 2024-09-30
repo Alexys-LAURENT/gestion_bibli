@@ -1,6 +1,7 @@
+import FooterCard from "./FooterCard";
 import { getSortedBooks } from '@/utils/HomePage/getSortedBooks';
 import Image from "next/image";
-import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
+import {Card, CardHeader, CardBody} from "@nextui-org/card";
 import { useEffect, useState } from 'react';
 
 export default function GetBooks() {
@@ -31,10 +32,7 @@ export default function GetBooks() {
                             width={160}
                         />
                     </CardBody>
-                    <CardFooter className='flex-col *items-end'>
-                        <p className="text-xs ml-2 mr-2 font-bold text-black">{book.title}</p>
-                        <small className="text-default-500  text-black">{}</small>
-                    </CardFooter>
+                    <FooterCard book={book}/>
                 </Card>
             ))}
         </div>
