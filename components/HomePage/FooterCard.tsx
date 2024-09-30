@@ -8,6 +8,7 @@ export default function FooterCard({book}:{book:any}) {
     useEffect(() => {
         async function getData() {
         const res = await getAuthorById(book.id_author);
+        console.log(res)
         setAuthor(res)
         if (res.error) {
             return <p>Erreur : {res.message}</p>;
@@ -15,10 +16,12 @@ export default function FooterCard({book}:{book:any}) {
     }
     getData();
     }, [])
-    return (
+    return author.data ? (
         <CardFooter className='flex-col *items-end'>
             <p className="text-xs ml-2 mr-2 font-bold text-black">{book.title}</p>
             <small className="text-default-500  text-black">{author.data.name_author}</small>
         </CardFooter>
+    ):(
+        <p>no data</p>
     )
 }
