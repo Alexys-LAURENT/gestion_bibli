@@ -8,7 +8,6 @@ export default function FooterCard({book}:{book:any}) {
     useEffect(() => {
         async function getData() {
         const res = await getAuthorById(book.id_author);
-        console.log(res)
         setAuthor(res)
         if (res.error) {
             return <p>Erreur : {res.message}</p>;

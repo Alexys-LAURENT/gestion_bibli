@@ -1,23 +1,36 @@
 import FooterCard from "./FooterCard";
-import { getSortedBooks } from '@/utils/HomePage/getSortedBooks';
+import { getSortedBooks, getAllBooks } from '@/utils/HomePage/getSortedBooks';
 import Image from "next/image";
 import {Card, CardHeader, CardBody} from "@nextui-org/card";
 import { useEffect, useState } from 'react';
 
-export default function GetBooks() {
+export default function GetBooks({page}:{page:string}) {
 
     const [books, setBooks] = useState<any>([])
     
-    useEffect(() => {
-        async function getData() {
-        const res = await getSortedBooks();
-        setBooks(res)
-        if (res.error) {
-            return <p>Erreur : {res.message}</p>;
+    if (page == "mostreserved") {
+        useEffect(() => {
+            async function getData() {
+            const res = await getSortedBooks();
+            setBooks(res)
+            if (res.error) {
+                return <p>Erreur : {res.message}</p>;
+            }
         }
+        getData();
+        }, [])
+    } else {
+        useEffect(() => {
+            async function getData() {
+            const res = await getAllBooks();
+            setBooks(res)
+            if (res.error) {
+                return <p>Erreur : {res.message}</p>;
+            }
+        }
+        getData();
+        }, [])
     }
-    getData();
-    }, [])
 
     return (
         <div className='flex flex-wrap gap-4 py-4 w-full'>

@@ -8,9 +8,11 @@ const TabsHome = () => {
     return (
         <Tabs selectedKey={tab} onSelectionChange={setTab} classNames={{cursor:"bg-gest_cta", tab:`text-white`}} variant="light" aria-label="Options colors">
             <Tab key="foryou" title="For You" className={`grid w-full ${tab !== 'foryou' ? 'text-black' : 'text-white'}`}>
-                <GetBooks></GetBooks>
+                <GetBooks page="foryou"></GetBooks>
             </Tab>
-            <Tab key="mostreservedbooks" title="Most reserved books" className={tab !== 'mostreservedbooks' ? 'text-black' : 'text-white'}/>
+            <Tab key="mostreservedbooks" title="Most reserved books" className={tab !== 'mostreservedbooks' ? 'text-black' : 'text-white'}>
+                <GetBooks page="mostreserved"></GetBooks>
+            </Tab>
         </Tabs>
     );
 }
