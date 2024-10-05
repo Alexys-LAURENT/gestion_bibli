@@ -16,6 +16,7 @@ declare module "next-auth" {
       city: string
       country: string
       is_admin: boolean
+      id_user: number
     } & DefaultSession["user"]
   }
 }
