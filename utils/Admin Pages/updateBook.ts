@@ -6,7 +6,6 @@ type Data = BookTypeWithAuthor & { name_author: string };
 
 export async function updateBook(data:Data){
   try {
-    console.log(data.year_publication);
     
     let new_author_id : number | null = null;
     const author = await prisma.authors.findFirst({

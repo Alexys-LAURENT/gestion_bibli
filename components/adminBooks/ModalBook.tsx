@@ -90,7 +90,6 @@ export default function ModalBook({
       router.refresh();
     }else{
       const newBook = await addNewBook({...newValue, name_author: autoCompleteValue});
-      console.log('newBook',newBook);
       
       if(newBook.error){
         setIsLoading(false);

@@ -5,7 +5,6 @@ import { getAllRentsCount } from "@/utils/Admin Pages/getAllRentsCount";
 const TableauSuspense = async () => {
 
   const {data:rents} = await getAllRentsPaginate(0,19);
-  console.log(rents);
   
   const {data:count} = await getAllRentsCount();
   

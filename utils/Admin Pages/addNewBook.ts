@@ -23,14 +23,6 @@ export async function addNewBook(data:Data){
       new_author_id = new_author.id_author;
     }
     const idToUse = new_author_id !== null ? new_author_id : author!.id_author;
-    console.log({
-      title: data.title,
-      year_publication: data.year_publication,
-      first_sentence: data.first_sentence,
-      image_url: data.image_url,
-      id_author: idToUse,
-      is_loan:false,
-    });
     
     const book = await prisma.books.create({
       data: {

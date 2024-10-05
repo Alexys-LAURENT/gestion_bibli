@@ -12,6 +12,29 @@ export async function createRent(idBook:number, idUser:number, loanDate:string){
         is_return: false,
       },
     })
+
+    if(!newRent){
+      return JSON.parse(JSON.stringify({
+        error: true,
+        message: 'Error creating the rent',
+      }))
+    }
+
+    const updatedBook = await prisma.books.update({
+      where: {
+        id_book: idBook,
+      },
+      data: {
+        is_loan: true,
+      },
+    })
+
+    if(!updatedBook){
+      return JSON.parse(JSON.stringify({
+        error: true,
+        message: 'Error updating book status',
+      }))
+    }
     
     return JSON.parse(JSON.stringify({
       success: true,

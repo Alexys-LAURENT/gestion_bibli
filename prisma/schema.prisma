@@ -38,7 +38,7 @@ model books_subjects {
 model loan {
   id_user   Int
   id_book   Int
-  loan_date DateTime @db.Date
+  loan_date DateTime @db.Timestamp
   is_return Boolean? @default(false)
   books     books    @relation(fields: [id_book], references: [id_book], onDelete: Cascade, onUpdate: Cascade)
   users     users    @relation(fields: [id_user], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
