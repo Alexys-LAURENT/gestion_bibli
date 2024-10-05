@@ -1,21 +1,19 @@
 import Logo from '@/assets/logo.png';
 import { auth } from '@/utils/auth';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { Input } from '@nextui-org/input';
+
 import Image from 'next/image';
 import SignInButton from './RedirectSignInButton';
 import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/popover";
 import SignOutButton from './SignOutButton';
+import AutoCompleteSearchBook from './AutoCompleteSearchBook';
 const TopBar = async () => {
   const session = await auth()
   
   return (
     <div className='flex justify-between items-center w-full px-4 bg-white'>
       <Image src={Logo.src} alt='Logo' quality={100} width={100} height={100} className='h-14 w-14' />
-      <Input size='sm' className='max-w-sm' placeholder='Search for a book...'
-      startContent={
-        <MagnifyingGlassIcon className='w-6 h-6 text-gray-400' />
-      } />
+      <AutoCompleteSearchBook />
+      
       {
         session ? (
           <Popover placement="bottom">
