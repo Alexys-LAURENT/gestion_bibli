@@ -52,7 +52,7 @@ export async function getSortedBooks() {
 
 export async function getAllBooks() {
     try {
-        const books = (await prisma.books.findMany()).slice(0,50); // Récupération des livres
+        const books = (await prisma.books.findMany()); // Récupération des livres
         return JSON.parse(JSON.stringify({ success: true, data: books }));
     } catch (error) {
         console.log(error);

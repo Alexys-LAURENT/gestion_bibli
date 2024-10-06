@@ -4,7 +4,6 @@ import { getAuthorById } from '@/utils/HomePage/getAuthorById';
 import { Button } from '@nextui-org/button';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 
 export default function AuthorButt({id}:{id:number}) {
   const pathName = usePathname();
