@@ -19,19 +19,15 @@ export default function AuthorButt({id}:{id:number}) {
         }
     }
     getData();
-    }, [])    
-    const link = {
-      name: author.data.name_author,
-      href: '',
-      icon: <UserCircleIcon className='w-6 h-6' />,
-    }
-    return (
+    }, [])
+    return author.data ? (
         <Button
-          as={Link}
-          key={`${link.name}-${link.href}
-          `} href={link.href} className={`w-full justify-start rounded-lg bg-transparent hover:bg-gest_cta data-[hover=true]:text-white data-[hover=true]:opacity-100 ${pathName === link.href ? 'bg-gest_cta text-white' : ''} `}>
-            {link.icon}
-            <span className='font-semibold ml-1'>{link.name}</span>
+          key={`${author.data.name_author}-`} 
+          href='' className={`w-full justify-start rounded-lg bg-transparent hover:bg-gest_cta data-[hover=true]:text-white data-[hover=true]:opacity-100 ${pathName === '' ? 'bg-gest_cta text-white' : ''} `}>
+            <UserCircleIcon className='w-6 h-6' />
+            <span className='font-semibold ml-1'>{author.data.name_author}</span>
           </Button>
+    ) : (
+      <p>Chargement...</p>
     )
 }
