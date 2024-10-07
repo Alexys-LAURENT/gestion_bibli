@@ -29,12 +29,28 @@ export async function FunctionGetAllOnDoingBooks(id_user: number)  {
         }
     });
     
+    type Book = {
+        books: {
+            image_url: string|null,
+            id_book: number,
+            title: string,
+            id_author: number,
+            authors: {
+                name_author: string
+            }
+          }
+    }
 
     const limitedBooks = booksrequest.slice(0, 20);
+    const clearLimitedBooks = limitedBooks.map((book:Book) => {
+      return {
+        ...book.books
+        }
+    });
 
-    console.log("test",limitedBooks);
+    
 
-    return JSON.parse(JSON.stringify({ success: true, data: limitedBooks }));
+    return JSON.parse(JSON.stringify({ success: true, data: clearLimitedBooks }));
 
     } catch (error) {
         if (error instanceof Error) {
