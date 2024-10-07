@@ -17,7 +17,7 @@ export default function DisplayBooks({ books, emptyMessage }: {books:Book[], emp
             {/* Vérifie si des livres sont présents */}
             {books && books.length > 0 ? (
                 books.map((book) => (
-                    <Link href={`/book/${book.id_book}`} key={book.id_book} className="flex flex-col items-center w-[120px] h-[250px]">
+                    <Link href={`/book/${book.id_book}`} key={emptyMessage + ' ' +book.id_book} className="flex flex-col items-center w-[120px] h-[250px]">
                         <div className="w-[120px] h-[180px] relative">
                             {
                                 book.image_url ? (<Image
