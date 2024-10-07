@@ -1,7 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { getSortedBooks } from '@/utils/HomePage/getSortedBooks';
-import { auth } from '@/utils/auth';
 import AuthorButt from "./AuthorButt";
 
 export default function AuthorSide() {
@@ -20,7 +19,7 @@ export default function AuthorSide() {
     return (
         <div>
             <p className="text-xs ml-2 mr-2 font-bold text-black">Popular authors</p>
-            {authors.data && authors.data.map((author:any) =>(
+            {authors.data && authors.data.slice(0, 5).map((author:any) =>(
                 <AuthorButt id={author.id_author}/>
             ))}
         </div>

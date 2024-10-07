@@ -41,14 +41,14 @@ export default function GetBooks({filter}:{filter:string}) {
     return (
         <div className='flex flex-wrap gap-4 py-4 w-full'>
             {books.data && books.data.slice(((page - 1) * 20), (page * 20)).map((book: any) => (
-                <Card className="grid py-4 w-[160px] h-[211px] py-0">
+                <Card className="grid py-4 w-[158px] h-[211px] py-0">
                     <CardBody className="py-0">
                         <Image
                             alt={book.title}
                             className="relative object-cover overflow-hidden"
                             src={book.image_url || '/no.jpg'}
                             height={200}
-                            width={160}
+                            width={158}
                         />
                     </CardBody>
                     <FooterCard book={book}/>
