@@ -118,7 +118,11 @@ export async function getBooksDiscoverForYouPaginate( offset: number, limit: num
             }
             });
         }
-        return JSON.parse(JSON.stringify({success: true, data: books }))
+
+        const lastPage = books.length < limit;
+
+
+        return JSON.parse(JSON.stringify({success: true, data: books, lastPage: lastPage }))
     } catch (error) {
         console.log(error);
         
