@@ -3,6 +3,8 @@ import prisma from "@/lib/db"; // Importer l'ORM Prisma
 
 export async function getBooksSearchForYouPaginate( offset: number, limit: number, bookName: string, authors: { name_author:string }[], subjects:{ label:string }[], publishYear: number | null) {
     
+    console.log(offset, limit);
+
     try {
         // get search books
         const books = await prisma.books.findMany({
