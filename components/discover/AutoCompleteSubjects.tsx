@@ -23,7 +23,7 @@ export default function AutoCompleteSubjects({ subjectsFilter, setSubjectsFilter
 			try {
 				setLoading(true);
 				setError(null);
-				const res = await getSubjectsPaginate(inputValue);
+				const res = await getSubjectsPaginate(inputValue, subjectsFilter);
 
 				setOptions(res.data);
 			} catch (err: any) {
@@ -46,7 +46,7 @@ export default function AutoCompleteSubjects({ subjectsFilter, setSubjectsFilter
 		}
 		setInputValue('');
 		// focus on input after selection
-		const input = document.getElementById('searchUser') as HTMLInputElement;
+		const input = document.getElementById('searchSubjects') as HTMLInputElement;
 		input.focus();
 	};
 
@@ -64,7 +64,7 @@ export default function AutoCompleteSubjects({ subjectsFilter, setSubjectsFilter
 	return (
 		<div>
 			<Input
-				id="searchUser"
+				id="searchSubjects"
 				autoComplete="off"
 				label="Subjects"
                 labelPlacement='outside'

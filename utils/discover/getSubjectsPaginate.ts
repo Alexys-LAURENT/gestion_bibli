@@ -1,7 +1,7 @@
 'use server'; // Marque la fonction pour qu'elle s'exécute côté serveur
 import prisma from "@/lib/db"; // Importer l'ORM Prisma
 
-export async function getSubjectsPaginate( label: string) {
+export async function getSubjectsPaginate( label: string, subjectsList: { label:string }[]) {
     
     try {
 
@@ -12,6 +12,12 @@ export async function getSubjectsPaginate( label: string) {
                 label: {
                     contains: label,
                     mode: 'insensitive'
+                },
+                NOT: {
+                    label: {
+                        in: subjectsList.map((subject) => subject.label),
+                        mode: 'default'
+                    }
                 }
             },
             select: {

@@ -19,12 +19,16 @@ export default function AutoCompleteAuthors({ authorsFilter, setAuthorsFilter }:
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        console.log(options);
+    } , [options])
+
 	useEffect(() => {
 		const fetchOptions = async () => {
 			try {
 				setLoading(true);
 				setError(null);
-				const res = await getAuthorsPaginate(inputValue);
+				const res = await getAuthorsPaginate(inputValue, authorsFilter);
 
 				setOptions(res.data);
 			} catch (err: any) {
@@ -47,7 +51,7 @@ export default function AutoCompleteAuthors({ authorsFilter, setAuthorsFilter }:
 		}
 		setInputValue('');
 		// focus on input after selection
-		const input = document.getElementById('searchUser') as HTMLInputElement;
+		const input = document.getElementById('searchAuthors') as HTMLInputElement;
 		input.focus();
 	};
 
@@ -65,7 +69,7 @@ export default function AutoCompleteAuthors({ authorsFilter, setAuthorsFilter }:
 	return (
 		<div>
 			<Input
-				id="searchUser"
+				id="searchAuthors"
 				autoComplete="off"
 				label="Authors"
                 labelPlacement='outside'

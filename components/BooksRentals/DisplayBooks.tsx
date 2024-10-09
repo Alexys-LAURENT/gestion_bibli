@@ -1,6 +1,7 @@
 "use client";
 import { Image } from "@nextui-org/image";
 import Link from "next/link";
+import placeholderImg from "@/public/placeholder.png";
 
 
 type Book = {
@@ -17,28 +18,14 @@ export default function DisplayBooks({ books, emptyMessage }: {books:Book[], emp
             {/* Vérifie si des livres sont présents */}
             {books && books.length > 0 ? (
                 books.map((book) => (
-                    <Link href={`/book/${book.id_book}`} key={emptyMessage + ' ' +book.id_book} className="flex flex-col items-center w-[120px] h-[250px]">
-                        <div className="w-[120px] h-[180px] relative">
-                            {
-                                book.image_url ? (<Image
-                                    alt={book.title}
-                                    className="object-cover rounded"
-                                    src={book.image_url}
-                                    height={180}
-                                    width={120}
-                                /> ) : (
-                                    <div className="w-[120px] h-[180px] bg-gray-300 rounded-md flex items-center justify-center">
-                                        <span className="text-tiny">No cover available</span>
-                                    </div>
-                                )
-                            }
-                            
-                        </div>
-                        <div className='flex flex-col items-center mt-2 text-center'>
-                            <p className="font-bold text-black text-sm">{book.title}</p>
-                            <small className=" text-gray-600 text-xs">
-                                {book.authors.name_author || 'Unknown Author'}
-                            </small>
+                    <Link href={`/book/${book.id_book}`} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
+                        {book.image_url 
+                            ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                            : <Image src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                        }
+                        <div className="flex flex-1 flex-col justify-between">
+                            <p className="text-black font-bold line-clamp-2" title={book.title}>{book.title}</p>
+                             <p className="text-default-500 text-sm">{book.authors.name_author}</p>
                         </div>
                     </Link>
                 ))

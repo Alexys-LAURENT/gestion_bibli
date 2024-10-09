@@ -42,8 +42,8 @@ const FiltersWrapper = ({ fetchSearchData, bookNameFilter, setBookNameFilter, au
     }
 
     return (
-        <div className="flex flex-col justify-between p-4 w-full h-full">
-            <div className="flex flex-col gap-4">
+        <div className="flex flex-col justify-between p-4 w-full h-full overflow-y-auto">
+            <div className="w-full h-full flex flex-col gap-4">
                 <Input label="Book Name" labelPlacement="outside" placeholder=" " value={bookNameFilter} onValueChange={setBookNameFilter} />
                 <AutoCompleteAuthors authorsFilter={authorsFilter} setAuthorsFilter={setAuthorsFilter} />
                 <AutoCompleteSubjects subjectsFilter={subjectsFilter} setSubjectsFilter={setSubjectsFilter} />

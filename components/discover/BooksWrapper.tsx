@@ -67,12 +67,12 @@ const BooksWrapper = () => {
     }, [])
 
     const fetchSearchData = async () => {
-        const search = await getBooksSearchForYouPaginate(offsetSearch, limitSearch, bookNameFilter, authorsFilter, subjectsFilter, publishYearFilter);
+        const search = await getBooksSearchForYouPaginate(0, limitSearch, bookNameFilter, authorsFilter, subjectsFilter, publishYearFilter);
         setBooksSearch(search.data)
         setLastPageSearch(search.lastPage)
         setTimeout(() => {
             setSelectedTab("search");
-        } , 1);
+        } , 100);
     }
 
     const handleFetchMoreForYou = async () => {

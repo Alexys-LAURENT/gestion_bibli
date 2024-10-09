@@ -1,9 +1,10 @@
 'use server'; // Marque la fonction pour qu'elle s'exécute côté serveur
 import prisma from "@/lib/db"; // Importer l'ORM Prisma
 
-export async function getBooksSearchForYouPaginate( offset: number, limit: number, bookName: string, authors: { name_author:string }[], subjects:{ label:string }[], publishYear: number | null) {
+export async function getBooksSearchForYouPaginate( offset: number, limit: number, bookName: string, authorsList: {name_author:string}[], subjects:{ label:string }[], publishYear: number | null) {
     
-    console.log(offset, limit);
+    console.log(authorsList);
+
 
     try {
         // get search books
@@ -15,18 +16,18 @@ export async function getBooksSearchForYouPaginate( offset: number, limit: numbe
                     contains: bookName,
                     mode: 'insensitive'
                 },
-                authors: authors.length > 0 ? {
+                authors: authorsList.length > 0 ? {
                     name_author: {
-                    in: authors.map((author) => author.name_author),
-                    mode: 'insensitive'
+                        in: authorsList.map((author) => author.name_author),
+                        mode: 'insensitive'
                     }
                 } : undefined,
                 books_subjects: subjects.length > 0 ? {
                     some: {
                     subjects: {
                         label: {
-                        in: subjects.map((subject) => subject.label),
-                        mode: 'insensitive'
+                            in: subjects.map((subject) => subject.label),
+                            mode: 'insensitive'
                         }
                     }
                     }
@@ -50,6 +51,8 @@ export async function getBooksSearchForYouPaginate( offset: number, limit: numbe
                 }
             }
         });
+
+        console.log(books);
 
         const lastPage = books.length < limit;
         
