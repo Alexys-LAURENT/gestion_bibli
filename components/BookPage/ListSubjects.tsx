@@ -16,7 +16,7 @@ const ListSubjects = ({ books_subjects }: { books_subjects: { subjects: { label:
           as={Link}
           href={`/discover?subjects=${subject.subjects.label}`}
           variant='faded'
-          key={index}
+          key={`subject - ${subject.subjects.label} - ${index}`}
         >
           {subject.subjects.label}
         </Chip>

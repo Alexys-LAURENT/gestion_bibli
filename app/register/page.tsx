@@ -65,7 +65,7 @@ const Page = () => {
 
   return (
     <div className="flex w-full h-full justify-center items-center">
-      <div className="flex flex-col w-5/12 bg-white p-4 rounded-md gap-4 items-center">
+      <div className="flex flex-col w-11/12 md:w-5/12 bg-white p-4 rounded-md gap-4 items-center">
       <Image src={Logo.src} alt='Logo' quality={100} width={100} height={100} className='h-14 w-14' />
       <Input placeholder="Email" value={form.mail} onChange={(e) => setform({...form, mail: e.target.value})} />
       <Input placeholder="Password" type="password" value={form.password} onChange={(e) => setform({...form, password: e.target.value})} />

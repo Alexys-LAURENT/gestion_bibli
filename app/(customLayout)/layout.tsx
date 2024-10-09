@@ -8,8 +8,8 @@ const Layout = async ({ children }:{children: ReactNode}) => {
   return (
     <main className="w-full h-full flex flex-col  ">
       <TopBar />
-      <div className="flex w-full h-full max-h-[calc(100%-56px)] ">
-        <SideBar is_admin={session?.user.is_admin|| false} />
+      <div className="flex flex-col sm:flex-row w-full h-full max-h-[calc(100%-56px)] ">
+        <SideBar session={session} />
         <div className="w-full h-full p-4">
       {
         children

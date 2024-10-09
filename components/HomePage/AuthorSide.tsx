@@ -1,26 +1,26 @@
-"use client"
-import { useEffect, useState } from 'react';
-import { getSortedBooks } from '@/utils/HomePage/getSortedBooks';
-import AuthorButt from "./AuthorButt";
+import { getPopularAuthors } from "@/utils/HomePage/getPopularAuthors";
+import { Button } from "@nextui-org/button";
+import { UserCircleIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
-export default function AuthorSide() {
-    const [authors, setAuthors] = useState<any>([])
+export default async function AuthorSide() {
+    const popularAuthors = await getPopularAuthors(7)
+    if(popularAuthors.error){
+        return <p>Une erreur est survenue, veuillez réessayer plus tard</p>
+    }    
 
-    useEffect(() => {
-        async function getData() {
-        const res = await getSortedBooks();
-        setAuthors(res)
-        if (res.error) {
-            return <p>Erreur : {res.message}</p>;
-        }
-    }
-    getData();
-    }, [])
     return (
         <div>
-            <p className="text-xs ml-2 mr-2 font-bold text-black">Popular authors</p>
-            {authors.data && authors.data.slice(0, 5).map((author:any) =>(
-                <AuthorButt id={author.id_author}/>
+            <p className="text-xs ml-2 mr-2 font-bold text-black mb-2">Popular authors</p>
+            {popularAuthors.data && popularAuthors.data.length > 0 && popularAuthors.data.map((author:{id_author:number, name_author:string}) => (
+                <Button
+                as={Link}
+                key={`${author.id_author}-`} 
+                href={`/discover?authors=${author.name_author}`} 
+                className={`w-full justify-start rounded-lg bg-transparent hover:bg-gest_cta data-[hover=true]:text-white data-[hover=true]:opacity-100 `}>
+                  <UserCircleIcon className='w-6 h-6' />
+                  <span className='font-semibold ml-1'>{author.name_author}</span>
+                </Button>
             ))}
         </div>
     )

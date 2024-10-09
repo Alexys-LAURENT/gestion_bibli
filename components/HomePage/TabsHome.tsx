@@ -1,17 +1,16 @@
 "use client"
-import GetBooks from "./GetBooks";
+import { Book } from "@/types/HomePage/entities";
+import DisplayBooks from "./DisplayBooks";
 import {Tabs, Tab} from "@nextui-org/tabs";
-import { useState } from "react";
 
-const TabsHome = () => {
-    const [tab, setTab] = useState<any>('foryou')
+const TabsHome = ({mostReservedBooks,forYouBooks}:{mostReservedBooks:Book[],forYouBooks:Book[]}) => {
     return (
-        <Tabs selectedKey={tab} onSelectionChange={setTab} classNames={{cursor:"bg-gest_cta", tab:`text-white`}} variant="light" aria-label="Options colors">
-            <Tab key="foryou" title="For You" className={`grid w-full ${tab !== 'foryou' ? 'text-black' : 'text-white'}`}>
-                <GetBooks filter="foryou"></GetBooks>
+        <Tabs classNames={{cursor:"bg-gest_cta", tab:`text-white`}} variant="light" aria-label="Options colors">
+            <Tab key="foryou" title="For You" >
+                <DisplayBooks books={forYouBooks}/>
             </Tab>
-            <Tab key="mostreservedbooks" title="Most reserved books" className={tab !== 'mostreservedbooks' ? 'text-black' : 'text-white'}>
-                <GetBooks filter="mostreserved"></GetBooks>
+            <Tab key="mostreservedbooks" title="Most reserved books" >
+                <DisplayBooks books={mostReservedBooks}/>
             </Tab>
         </Tabs>
     );
