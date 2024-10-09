@@ -1,6 +1,6 @@
 "use client"
 import {Tabs, Tab} from "@nextui-org/tabs";
-import Image from "next/image";
+import { Image } from "@nextui-org/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import placeholderImg from "@/public/placeholder.png";
@@ -34,25 +34,25 @@ const BooksWrapper = () => {
     const [booksMostLoaned, setBooksMostLoaned] = useState<any>([]);
 
     const [offsetForYou, setOffsetForYou] = useState<number>(0);
-    const limitForYou = 25;
+    const limitForYou = 50;
     const [lastPageForYou, setLastPageForYou] = useState<boolean>(false);
     const [offsetMostLoaned, setOffsetMostLoaned] = useState<number>(0);
-    const limitMostLoaned = 25;
+    const limitMostLoaned = 50;
     const [lastPageMostLoaned, setLastPageMostLoaned] = useState<boolean>(false);
 
 
     const [booksSearch, setBooksSearch] = useState<any>([]);
     const [offsetSearch, setOffsetSearch] = useState<number>(0);
     const [lastPageSearch, setLastPageSearch] = useState<boolean>(false);
-    const limitSearch = 25;
+    const limitSearch = 50;
 
     
     useEffect(() => {
         async function getData() {
             const for_you = await getBooksDiscoverForYouPaginate(offsetForYou, limitForYou);
             setBooksForYou(for_you.data)
-            setLastPageForYou(for_you.lastPage)
             setOffsetForYou(offsetForYou + limitForYou);
+            setLastPageForYou(for_you.lastPage)
             
             const most_loaned = await getBooksDiscoverMostLoanedPaginate(offsetMostLoaned, limitMostLoaned);
             setBooksMostLoaned(most_loaned.data)
@@ -72,7 +72,7 @@ const BooksWrapper = () => {
         setLastPageSearch(search.lastPage)
         setTimeout(() => {
             setSelectedTab("search");
-        } , 100);
+        } , 1);
     }
 
     const handleFetchMoreForYou = async () => {
@@ -100,14 +100,14 @@ const BooksWrapper = () => {
         setSelectedTab(tab);
         
         // reset offset and limit
-        setOffsetForYou(0);
-        setOffsetMostLoaned(0);
-        setOffsetSearch(0);
+        setOffsetForYou(50);
+        setOffsetMostLoaned(50);
+        setOffsetSearch(50);
         
-        // slice the array to keep only 25 books
-        setBooksForYou(booksForYou.slice(0, 25));
-        setBooksMostLoaned(booksMostLoaned.slice(0, 25));
-        setBooksForYou(booksForYou.slice(0, 25));
+        // slice the array to keep only 50 books
+        setBooksForYou(booksForYou.slice(0, 50));
+        setBooksMostLoaned(booksMostLoaned.slice(0, 50));
+        setBooksSearch(booksSearch.slice(0, 50));
     }
 
     return (
@@ -120,14 +120,18 @@ const BooksWrapper = () => {
                                 dataLength={booksForYou.length} 
                                 next={() => { handleFetchMoreForYou(); }}
                                 className="flex flex-wrap gap-6 justify-start"
-                                hasMore={true}
+                                hasMore={!lastPageForYou}
                                 loader={<Spinner color="primary" size="sm" className="w-10 h-10 mx-auto" />}
                                 scrollableTarget="scrollForYou"
+                                endMessage={booksForYou.length > 0 ? null : <p className="text-center w-full text-default-500">No books found</p>}
                             >
                             {
                                 booksForYou && booksForYou.map((book: any) => (
-                                        <Link href={'#'} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[200px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
-                                            <Image src={book.image_url || placeholderImg} alt={book.title} className="w-full h-[250px] object-cover rounded-sm" width={250} height={300}/>
+                                        <Link href={`/book/${book.id_book}`} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
+                                            {book.image_url 
+                                                ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                                                : <Image src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                                            }
                                             <div className="flex flex-1 flex-col justify-between">
                                                 <p className="text-black font-bold line-clamp-2" title={book.title}>{book.title}</p>
                                                 <p className="text-default-500 text-sm">{book.authors.name_author}</p>
@@ -144,13 +148,17 @@ const BooksWrapper = () => {
                                 dataLength={booksMostLoaned.length}
                                 next={() => { handleFetchMoreMostLoaned(); }}
                                 className="flex flex-wrap gap-6 justify-start"
-                                hasMore={true}
+                                hasMore={!lastPageMostLoaned}
                                 loader={<Spinner color="primary" size="sm" className="w-10 h-10 mx-auto" />}
                                 scrollableTarget="scrollMostLoaned"
+                                endMessage={booksMostLoaned.length > 0 ? null : <p className="text-center w-full text-default-500">No books found</p>}
                             >
                             {booksMostLoaned && booksMostLoaned.map((book: any) => (
-                                <Link href={'#'} key={`book-most-loaned-${book.id_book}`} className="flex flex-col gap-4 w-[200px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
-                                    <Image src={book.image_url || placeholderImg} alt={book.title} className="w-full h-[250px] object-cover rounded-sm" width={250} height={300}/>
+                                <Link href={`/book/${book.id_book}`} key={`book-most-loaned-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
+                                    {book.image_url 
+                                        ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                                        : <Image src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                                    }
                                     <div className="flex flex-1 flex-col justify-between">
                                     <p className="text-black font-bold line-clamp-2" title={book.title}>{book.title}</p>
                                     <p className="text-default-500 text-sm">{book.authors.name_author}</p>
@@ -173,8 +181,11 @@ const BooksWrapper = () => {
                                     endMessage={booksSearch.length > 0 ? null : <p className="text-center w-full text-default-500">No books found for your search</p>}
                                 >
                                 {booksSearch && booksSearch.map((book: any) => (
-                                    <Link href={'#'} key={`book-search-${book.id_book}`} className="flex flex-col gap-4 w-[200px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
-                                        <Image src={book.image_url || placeholderImg} alt={book.title} className="w-full h-[250px] object-cover rounded-sm" width={250} height={300}/>
+                                    <Link href={`/book/${book.id_book}`} key={`book-search-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
+                                        {book.image_url 
+                                            ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                                            : <Image src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                                        }
                                         <div className="flex flex-1 flex-col justify-between">
                                             <p className="text-black font-bold line-clamp-2" title={book.title}>{book.title}</p>
                                             <p className="text-default-500 text-sm">{book.authors.name_author}</p>
