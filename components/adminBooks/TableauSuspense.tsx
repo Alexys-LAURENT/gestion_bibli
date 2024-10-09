@@ -1,6 +1,6 @@
 import { getAllBooksPaginate } from "@/utils/Admin Pages/getAllBooks";
 import TableauBooks from "./TableauBooks";
-import { BookType } from "@/types/AdminPages/entities";
+import { BookTypeWithAuthor } from "@/types/AdminPages/entities";
 import { getAllBooksCount } from "@/utils/Admin Pages/getAllBooksCount";
 const TableauSuspense = async () => {
 
@@ -11,7 +11,7 @@ const TableauSuspense = async () => {
   return (
     <TableauBooks
       initalBooks={
-        (books as BookType[]) || []
+        (books as BookTypeWithAuthor[]) || []
       }
       initialTotal={count || 0}
     />

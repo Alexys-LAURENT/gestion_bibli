@@ -2,12 +2,13 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/button';
-import { AuthorType, BookType } from '@/types/AdminPages/entities';
+import { AuthorType, BookTypeWithAuthor } from '@/types/AdminPages/entities';
 import { Input } from '@nextui-org/input';
 import {  Autocomplete,  AutocompleteItem} from "@nextui-org/autocomplete";
 import { getAllAuthorsLike } from '@/utils/getAllAuthorsLike';
 import { updateBook } from '@/utils/Admin Pages/updateBook';
 import { addNewBook } from '@/utils/Admin Pages/addNewBook';
+import React from 'react';
 
 const Modal = dynamic(() => import('@nextui-org/modal').then((mod) => mod.Modal));
 const ModalContent = dynamic(() => import('@nextui-org/modal').then((mod) => mod.ModalContent));
@@ -24,24 +25,31 @@ export default function ModalBook({
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   modalAction: 'edit' | 'add';
-  modalData: BookType;
+  modalData: BookTypeWithAuthor;
 }) {
   const router = useRouter()
-  const [autoCompleteValue, setAutoCompleteValue] = useState<string>('');
+  const [autoCompleteValue, setAutoCompleteValue] = useState<string>(modalData.authors?.name_author || '');
   const [authors, setAuthors] = useState<AuthorType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newValue, setNewValue] = useState<BookType>({
+  const [newValue, setNewValue] = useState<BookTypeWithAuthor>({
     id_book: 0,
-    id_author: 0,
     title: '',
     year_publication: 0,
     first_sentence: '',
     image_url: '',
     is_loan: false,
+    authors: {
+      id_author: 0,
+      name_author: '',
+    },
   });
 
   useEffect(() => {
     setNewValue(modalData);
+  }, [modalData]);
+
+  useEffect(() => {
+    setAutoCompleteValue(modalData.authors?.name_author || '');
   }, [modalData]);
 
 
@@ -71,30 +79,53 @@ export default function ModalBook({
         console.error(updatedBook.message);
         alert('An error occurred');
         onClose();
+        reset_data();
         router.refresh();
         return;
       }
       setIsLoading(false);
       alert('Book updated');
       onClose();
+      reset_data();
       router.refresh();
     }else{
       const newBook = await addNewBook({...newValue, name_author: autoCompleteValue});
-      console.log('newBook',newBook);
       
       if(newBook.error){
         setIsLoading(false);
         console.error(newBook.message);
         alert('An error occurred');
         onClose();
+        reset_data();
         router.refresh();
         return;
       }
       setIsLoading(false);
       alert('Book added');
       onClose();
+      reset_data();
       router.refresh();
     }
+  }
+
+  const reset_data = () => {
+    setNewValue({
+      id_book: 0,
+      title: '',
+      year_publication: 0,
+      first_sentence: '',
+      image_url: '',
+      is_loan: false,
+      authors: {
+        id_author: 0,
+        name_author: '',
+      },
+    });
+  }
+
+  const close = (onClose: () => void) => {
+    onClose();
+    reset_data();
   }
 
 
@@ -116,25 +147,26 @@ export default function ModalBook({
                   value={autoCompleteValue}
                   onValueChange={setAutoCompleteValue}
                   onSelectionChange={(value)=>setAutoCompleteValue(value as string)}
-        label="Select an author" 
-        allowsCustomValue
-      >
-        {authors && authors.map((author) => (
-          <AutocompleteItem key={author.name_author} value={author.name_author}>
-            {author.name_author}
-          </AutocompleteItem>
-        ))}
-      </Autocomplete>
-     
+                  label="Select an author" 
+                  allowsCustomValue
+                  defaultSelectedKey={autoCompleteValue}
+                >
+                {authors && authors.map((author) => (
+                  <AutocompleteItem key={author.name_author} value={author.name_author}>
+                    {author.name_author}
+                  </AutocompleteItem>
+                ))}
+              </Autocomplete>
+
                   <Input label="Image URL" value={newValue.image_url || ''} onChange={(e) => setNewValue({ ...newValue, image_url: e.target.value })} />
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
+                  <Button color="danger" variant="light" onPress={() => close(onClose)}>
                     Cancel
                   </Button>
                   <Button
                     isLoading={isLoading}
-                    color="primary"
+                    className='bg-gest_cta text-white'
                     onPress={() => handleSubmit(onClose)}
                     isDisabled={is_disabled()}
                   >

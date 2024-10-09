@@ -12,7 +12,7 @@ import {  useCallback, useEffect, useMemo, useState } from 'react';
 // import { updateRowWhere } from '@/utils/database/updateRowWhere';
 // import { selectWhere } from '@/utils/database/selectWhere';
 import { useDebouncedCallback } from 'use-debounce';
-import { BookType } from '@/types/AdminPages/entities';
+import {  BookTypeWithAuthor } from '@/types/AdminPages/entities';
 import {Pagination} from "@nextui-org/pagination";
 import {Spinner} from "@nextui-org/spinner";
 import { getAllBooksPaginate } from '@/utils/Admin Pages/getAllBooks';
@@ -25,11 +25,13 @@ import ModalBook from './ModalBook';
 import {
   useDisclosure
 } from "@nextui-org/modal";
+import { deleteBook } from '@/utils/Admin Pages/deleteBook';
+import { useRouter } from 'next/navigation';
 const TableauBooks = ({
   initalBooks,
   initialTotal,
 }: {
-  initalBooks: BookType[];
+  initalBooks: BookTypeWithAuthor[];
   initialTotal: number;
 }) => {
 
@@ -39,16 +41,19 @@ const TableauBooks = ({
   // custom toast
   // const { customToast } = useContext(ToastContext);
   // router
-  // const router = useRouter();
+  const router = useRouter();
   // data sent to modal
-  const [modalData, setModalData] = useState<BookType>({
+  const [modalData, setModalData] = useState<BookTypeWithAuthor>({
     id_book: 0,
-    id_author: 0,
     title: '',
     year_publication: 0,
     first_sentence: null,
     image_url: null,
     is_loan:false,
+    authors: {
+      id_author: 0,
+      name_author: '',
+    },
   });
   // modal action
   const [modalAction, setModalAction] = useState<'edit' | 'add'>('edit');
@@ -67,16 +72,20 @@ const TableauBooks = ({
   // columns in table
   const columns = [
     {
+      key: 'image_url',
+      label: 'Image',
+    },
+    {
       key: 'title',
       label: 'Title',
     },
     {
-      key: 'year_publication',
-      label: 'Year',
+      key: 'authors',
+      label: 'Author',
     },
     {
-      key: 'image_url',
-      label: 'Image',
+      key: 'year_publication',
+      label: 'Year',
     },
     {
       key: 'is_loan',
@@ -121,7 +130,7 @@ const TableauBooks = ({
   const debouncedFilter = useDebouncedCallback(
     async (value) => {
       try {
-        const res = await getAllBooksPaginate(0, 0, `%${value}%`);
+        const res = await getAllBooksPaginate(0, 50, `%${value}%`);
         if(res.error){
           console.error('TableauBddIA - debouncedFilter', res.message);
           setBooks([])
@@ -152,7 +161,7 @@ const TableauBooks = ({
     } else {
       setBooks(initalBooks);
     }
-  }, [page]);
+  }, [page, debouncedPages, debouncedFilter, initalBooks]);
 
   // trigger when search input changes
   useEffect(() => {
@@ -172,7 +181,7 @@ const TableauBooks = ({
       debouncedFilter.cancel();
       callDebouncePage();
     }
-  }, [filterValue]);
+  }, [filterValue, debouncedPages, debouncedFilter]);
 
   // update documents when submitted
   useEffect(() => {
@@ -184,36 +193,33 @@ const TableauBooks = ({
     setTotal(initialTotal);
   }, [initialTotal]);
 
-  // function to open modal
-  const openModal = (action: 'edit' | 'add', data: BookType) => {
-    setModalAction(action);
-    setModalData(data);
-    onOpen();
-  };
+// function to open modal
+const openModal = useCallback((action: 'edit' | 'add', data: BookTypeWithAuthor) => {
+  setModalAction(action);
+  setModalData(data);
+  onOpen();
+}, [setModalAction, setModalData, onOpen]);
 
   // function to delete documents
-  // const handleDelete = async (ids: string[] | 'all' | 'everything') => {
-  //   try {
-  //     let allPromises: Promise<any>[];
-  //     // 'all' is default behavior of NextUI table
-  //     if (ids === 'all') {
-  //       allPromises = documents.map((doc) => deleteAllWhere('documents', [{ id: doc.id }]));
-  //     } else {
-  //       if (ids === 'everything') {
-  //         allPromises = [deleteAllWhere('documents', [{ id_hapi: HID }])];
-  //       } else {
-  //         allPromises = ids.map((id) => deleteAllWhere('documents', [{ id: id }]));
-  //       }
-  //     }
-  //     await Promise.all(allPromises);
-  //     const message = ids === 'all' || ids.length > 1 ? 'Les documents ont été supprimés.' : 'Le document a été supprimé.';
-  //     customToast.success(message);
-  //     router.refresh();
-  //   } catch (error) {
-  //     console.error('TableauBddIA', error);
-  //     customToast.error('Une erreur est survenue lors de la suppression des documents. lala');
-  //   }
-  // };
+  const handleDelete = useCallback(async (ids: string[] | 'all') => {
+    try {
+      let allPromises: Promise<unknown>[];
+      // 'all' is default behavior of NextUI table
+      if (ids === 'all') {
+        allPromises = books.map((book) => deleteBook(book.id_book));
+      } else {
+        allPromises = ids.map((id) => deleteBook(parseInt(id)));
+      }
+      await Promise.all(allPromises);
+      const message = ids === 'all' || ids.length > 1 ? 'Books deleted.' : 'Book deleted.';
+      alert(message);
+      // customToast.success(message);
+      router.refresh();
+    } catch (error) {
+      console.error('TableauBddIA', error);
+      // customToast.error('Une erreur est survenue lors de la suppression des documents. lala');
+    }
+  }, [books, router]);
 
   // top content of table
   const topContent = useMemo(() => {
@@ -222,48 +228,40 @@ const TableauBooks = ({
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Books ({total})</h1>
           <div className="flex items-center gap-2">
-            {books && books.length > 0 && (
-              <Button
-                size="sm"
-                color="danger"
-                onClick={() => {
-                  // handleDelete('everything');
-                }}
-              >
-                Supprimer tous les documents
-              </Button>
-            )}
             {((selectedKeys as Set<string>).size > 0 || selectedKeys === 'all') && (
               <Button color="danger" size="sm" 
               onClick={() => {
-                // handleDelete(selectedKeys === 'all' ? 'all' : Array.from(selectedKeys))
+                handleDelete(selectedKeys === 'all' ? 'all' : Array.from(selectedKeys))
                 }}>
-                {selectedKeys === 'all' ? 'Supprimer toute la page' : `Supprimer ${(selectedKeys as Set<string>).size} éléments`}
+                {selectedKeys === 'all' ? 'Delete all page' : `Delete ${(selectedKeys as Set<string>).size} book(s)`}
               </Button>
             )}
-            <Button size="sm" color="primary" onClick={() => {
+            <Button size="sm" className='bg-gest_cta text-white' onClick={() => {
               openModal('add', {
                 id_book: 0,
-                id_author: 0,
                 title: '',
                 year_publication: 0,
                 first_sentence: null,
                 image_url: null,
                 is_loan:false,
+                authors: {
+                  id_author: 0,
+                  name_author: '',
+                },
               })
               }}>
-              Ajouter
+              Add book
             </Button>
           </div>
         </div>
-        <Input value={filterValue} onChange={(e) => setFilterValue(e.target.value)} size="sm" placeholder="Rechercher un document IA" />
+        <Input value={filterValue} onChange={(e) => setFilterValue(e.target.value)} size="sm" placeholder="Search for a book..." />
       </>
     );
-  }, [selectedKeys, books, filterValue, total]);
+  }, [selectedKeys, filterValue, total, openModal,handleDelete]);
 
   // function to render cell in table
   const renderCell = useCallback(
-    (book: BookType, columnKey: keyof BookType | 'actions') => {
+    (book: BookTypeWithAuthor, columnKey: keyof BookTypeWithAuthor | 'actions') => {
       const cellValue = columnKey === 'actions' ? undefined : book[columnKey] 
 
       switch (columnKey) {
@@ -282,12 +280,12 @@ const TableauBooks = ({
                       openModal('edit',book);
                     }}
                   >
-                    Modifier
+                    Update
                   </DropdownItem>
                   <DropdownItem variant="flat" color="danger" onClick={() => {
-                    // handleDelete([action.id])
+                    handleDelete([book.id_book.toString()])
                     }}>
-                    Supprimer
+                    Delete
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
@@ -305,34 +303,40 @@ const TableauBooks = ({
         case 'image_url':
           return book[columnKey] ? (
             <div className="flex  justify-center items-center">
-              <Image priority={true} src={book[columnKey]} alt={`${book.title} - cover`} width={200} height={300} className="w-24 h-24 rounded-md" />
+              <Image priority={true} src={book[columnKey]} alt={`${book.title} - cover`} width={200} height={300} className="w-16 h-auto rounded-md" />
             </div>
           ) : (
             <div className="flex  justify-center items-center">-</div>
           );
-          
+        case 'authors':
+          return (
+            <div className="flex  justify-center items-center">
+              {book[columnKey].name_author}
+            </div>
+          );
         default:
           return (
-            cellValue
-            // <div
-            //   dangerouslySetInnerHTML={{
-            //     __html: filterValue
-            //       ? (cellValue || '').replace(new RegExp(filterValue, 'gi'), (match) => `<span class="bg-yellow-300/60">${match}</span>`).replace(/\n/g, '<br/>')
-            //       : (cellValue || '').replace(/\n/g, '<br/>'),
-            //   }}
-            // />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: filterValue
+                  ? (cellValue || '').toString().replace(new RegExp(filterValue, 'gi'), (match) => `<span class="bg-yellow-300/60">${match}</span>`).replace(/\n/g, '<br/>')
+                  : (cellValue || '').toString().replace(/\n/g, '<br/>'),
+              }}
+            />
           );
       }
     },
-    [filterValue],
+    [openModal,filterValue,handleDelete],
   );
 
 
   return (
     <>
-      <ModalBook isOpen={isOpen} onOpenChange={onOpenChange} modalAction={modalAction} modalData={modalData} />
+    <div className='h-full overflow-y-auto '> 
+
+      <ModalBook key={modalData.id_book} isOpen={isOpen} onOpenChange={onOpenChange} modalAction={modalAction} modalData={modalData} />
       <Table
-        classNames={{ wrapper: 'rounded-md shadow-none border border-gray-300' }}
+        classNames={{ wrapper: 'rounded-md shadow-none ' }}
         color="primary"
         selectedKeys={selectedKeys}
         onSelectionChange={(keys) => setSelectedKeys(keys as Set<string> | string)}
@@ -349,10 +353,12 @@ const TableauBooks = ({
         aria-label="Example table with dynamic content"
       >
         <TableHeader columns={columns}>{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}</TableHeader>
-        <TableBody loadingContent={<Spinner />} loadingState={isLoading ? 'loading' : 'idle'} emptyContent={'Aucun documents enregistrés.'} items={books}>
-          {(item) => <TableRow key={item.id_book}>{(columnKey) => <TableCell>{renderCell(item, (columnKey as keyof BookType))}</TableCell>}</TableRow>}
+        <TableBody loadingContent={<Spinner />} loadingState={isLoading ? 'loading' : 'idle'} emptyContent={'No books.'} items={books}>
+          {(item) => <TableRow key={item.id_book}>{(columnKey) => <TableCell>{renderCell(item, (columnKey as keyof BookTypeWithAuthor)) as React.ReactNode}</TableCell>}</TableRow>}
         </TableBody>
       </Table>
+    </div>
+
     </>
   );
 };
