@@ -1,9 +1,9 @@
+import MainWrapper from "@/components/discover/MainWrapper";
 
 const Page = () => {
+
   return (
-    <div>
-      Discover
-    </div>
+    <MainWrapper/>
   );
 };
 
