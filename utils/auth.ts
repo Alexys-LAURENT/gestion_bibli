@@ -78,7 +78,7 @@ export const config = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
 				token = {
 					...token,
@@ -93,6 +93,25 @@ export const config = {
           id_user: (user as unknown as any).id,
 				};
 			}
+
+      if (trigger === "update") {
+        console.log(trigger);
+        console.log('session',session);
+        
+        // Note, that `session` can be any arbitrary object, remember to validate it!
+        token = {
+					...token,
+          name: session.firstname + ' ' + session.lastname,
+          firstname: (session as unknown as any).firstname,
+          lastname: (session as unknown as any).lastname,
+          birth_date: (session as unknown as any).birth_date,
+          address: (session as unknown as any).address,
+          zip: (session as unknown as any).zip,
+          city: (session as unknown as any).city,
+          country: (session as unknown as any).country,
+				};
+      }
+
 			return token;
     },
     async session({ session, token }) {

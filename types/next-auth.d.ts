@@ -11,7 +11,7 @@ declare module "next-auth" {
       id_user:string
       firstname: string
       lastname: string
-      birthdate: string
+      birth_date: string
       address: string
       zip: string
       city: string
