@@ -1,10 +1,11 @@
-import Image from 'next/image';
+import { Image } from "@nextui-org/image";
 import { getBookById } from "@/utils/getBookById";
 import { redirect } from 'next/navigation';
 import RentButton from '@/components/BookPage/RentButton';
 import { auth } from '@/utils/auth';
 import ListSubjects from '@/components/BookPage/ListSubjects';
 import Link from 'next/link';
+import { Chip } from "@nextui-org/chip";
 
 const Page = async ({ params }: { params: { id_book: string } }) => {
   const session = await auth()
@@ -23,9 +24,7 @@ const Page = async ({ params }: { params: { id_book: string } }) => {
             alt={book.title}
             width={600}
             height={600}
-            quality={100}
-            className=""
-            objectFit="cover"
+            className="rounded-md"
           />
         ) : (
           <div className="w-full h-[400px] bg-gray-200 rounded-lg"></div> // Placeholder pour image manquante
@@ -38,14 +37,18 @@ const Page = async ({ params }: { params: { id_book: string } }) => {
         <h1 className="text-4xl font-bold mb-2">{book.title}</h1>
 
         {/* Auteur */}
-        <Link href={`/discover?authors=${book.authors?.name_author || ''}`}>
-        <p className={`text-2xl font-medium text-gray-600 mb-4 'cursor-pointer`}>
-          {book.authors?.name_author || "Unknown author"}
-        </p>
-        </Link>
+        <Chip variant="faded" size="lg" className="text-lg font-medium text-gray-600 mb-2" as={Link} href={`/discover?authors=${book.authors?.name_author || ''}`}>
+          {/* <p className={`text-2xl font-medium text-gray-600 cursor-pointer py-2`}> */}
+            {book.authors?.name_author || "Unknown author"}
+          {/* </p> */}
+        </Chip>
 
         {/* Année de publication */}
-        <p className="text-lg font-semibold mb-2">Publish year: {book.year_publication || "Unknown year"}</p>
+        <p className="text-lg font-semibold mb-2 flex gap-1 items-center">Publish year: 
+          <Chip variant="faded" size="sm" as={Link} href={`/discover?publishYear=${book.year_publication || ''}`}>
+            {book.year_publication || "Unknown year"}
+          </Chip>
+        </p>
 
         {/* Première phrase */}
         <p className="text-base font-light text-gray-700 mb-4">

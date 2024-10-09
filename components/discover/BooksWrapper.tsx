@@ -113,8 +113,8 @@ const BooksWrapper = () => {
     return (
         <div className="flex w-full h-full gap-4">
             <div className="h-full flex flex-col w-full bg-white rounded-md p-4 gap-4 overflow-hidden">
-                <Tabs aria-label="Options" classNames={{cursor: "bg-gest_cta", tabContent:'transition-colors duration-200 group-data-[selected=true]:text-white', panel:'w-full h-[calc(100%-50px)]' }} selectedKey={selectedTab} onSelectionChange={(tab) => handleTabChange(tab)}>
-                    <Tab key="for_you" title="For you">
+                <Tabs aria-label="Options" classNames={{cursor: "bg-gest_cta", panel:'w-full h-[calc(100%-50px)]' }} selectedKey={selectedTab} onSelectionChange={(tab) => handleTabChange(tab)}>
+                    <Tab key="for_you" title="For You">
                         <div id="scrollForYou" className="w-full h-full overflow-y-auto">
                             <InfiniteScroll
                                 dataLength={booksForYou.length} 

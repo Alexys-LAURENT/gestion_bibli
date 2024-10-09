@@ -41,13 +41,18 @@ const FiltersWrapper = ({ fetchSearchData, bookNameFilter, setBookNameFilter, au
         setPublishYearFilter("");
     }
 
+    const handleChangePublishYear = (e:any) => {
+        ["e", "E", "+", "-"].includes(e.key) && e.preventDefault();
+        e.key === "Enter" && document.getElementById("FilterButton")?.click()
+    }
+
     return (
         <div className="flex flex-col justify-between p-4 w-full h-full overflow-y-auto">
             <div className="w-full h-full flex flex-col gap-4">
-                <Input label="Book Name" labelPlacement="outside" placeholder=" " value={bookNameFilter} onValueChange={setBookNameFilter} />
+                <Input label="Book Name" labelPlacement="outside" placeholder=" " value={bookNameFilter} onValueChange={setBookNameFilter} onKeyDown={(e) => e.key === "Enter" && document.getElementById("FilterButton")?.click()} />
                 <AutoCompleteAuthors authorsFilter={authorsFilter} setAuthorsFilter={setAuthorsFilter} />
                 <AutoCompleteSubjects subjectsFilter={subjectsFilter} setSubjectsFilter={setSubjectsFilter} />
-                <Input type="number" label="Publish Year" labelPlacement="outside" placeholder=" " value={publishYearFilter} onValueChange={setPublishYearFilter} onKeyDown={(evt) => ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()} />
+                <Input type="number" label="Publish Year" labelPlacement="outside" placeholder=" " value={publishYearFilter} onValueChange={setPublishYearFilter} onKeyDown={(e) => handleChangePublishYear(e)} />
             </div>
             <div className="flex gap-2 w-full">
                 {(bookNameFilter || authorsFilter.length > 0 || subjectsFilter.length > 0 || publishYearFilter) &&
@@ -55,7 +60,7 @@ const FiltersWrapper = ({ fetchSearchData, bookNameFilter, setBookNameFilter, au
                         <TrashIcon className="w-6 h-6" />
                     </Button>
                 }
-                <Button as={Link} href={getSearchUrl()} variant="flat" className="w-full bg-gest_cta text-white" onClick={() => fetchSearchData()}>Filter</Button>
+                <Button id="FilterButton" as={Link} href={getSearchUrl()} variant="flat" className="w-full bg-gest_cta text-white" onClick={() => fetchSearchData()}>Filter</Button>
             </div>
         </div>
     );

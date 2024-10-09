@@ -96,16 +96,11 @@ const Page = async ({searchParams}:{searchParams?: { [key: string]: string | str
         });
         return redirect('/settings?success=Password updated successfully')
 
-      }else{
+      } else {
         return redirect('/settings?error=Current password is not correct')
         
       }
-      
-      
-      return redirect('/settings?success=Profile updated successfully')
     }
-    console.log('searchParams',searchParams);
-
     
 
   return (
