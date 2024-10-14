@@ -11,7 +11,7 @@ export default async function SubjectSide() {
 
     return (
         <div>
-            <p className="text-xs ml-2 mr-2 font-bold text-black mb-2">Popular authors</p>
+            <p className="text-xs ml-2 mr-2 font-bold text-black mb-2">Popular subjects</p>
             {popularSubjects.data && popularSubjects.data.length > 0 && popularSubjects.data.map((subject:{id_subject:number, label:string}) => (
                 <Button
                 as={Link}
@@ -19,7 +19,7 @@ export default async function SubjectSide() {
                 href={`/discover?subjects=${subject.label}`} 
                 className={`w-full justify-start rounded-lg bg-transparent hover:bg-gest_cta data-[hover=true]:text-white data-[hover=true]:opacity-100 `}>
                  <BookOpenIcon className='w-6 h-6' />
-                  <span className='font-semibold ml-1'>{subject.label}</span>
+                  <span className='font-semibold ml-1 w-3/12'>{subject.label}</span>
                 </Button>
             ))}
         </div>

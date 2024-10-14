@@ -19,7 +19,7 @@ export default async function AuthorSide() {
                 href={`/discover?authors=${author.name_author}`} 
                 className={`w-full justify-start rounded-lg bg-transparent hover:bg-gest_cta data-[hover=true]:text-white data-[hover=true]:opacity-100 `}>
                   <UserCircleIcon className='w-6 h-6' />
-                  <span className='font-semibold ml-1'>{author.name_author}</span>
+                  <span className='font-semibold ml-1 w-3/12'>{author.name_author}</span>
                 </Button>
             ))}
         </div>
