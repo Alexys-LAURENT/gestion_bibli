@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-    hubschool_front:
+    gest_bibli:
         container_name: gest-bibli
         restart: always
         build:
