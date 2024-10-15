@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { Input } from '@nextui-org/input';
 import { Chip } from '@nextui-org/chip';
 import { Spinner } from '@nextui-org/spinner';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import { Listbox, ListboxItem } from '@nextui-org/listbox';
-import Image from 'next/image';
 import { getAuthorsPaginate } from '@/utils/discover/getAuthorsPaginate';
 
 interface author {
@@ -13,7 +12,7 @@ interface author {
 	name_author: string;
 }
 
-export default function AutoCompleteAuthors({ authorsFilter, setAuthorsFilter }: { authorsFilter: author[]; setAuthorsFilter: any }) {
+export default function AutoCompleteAuthors({ authorsFilter, setAuthorsFilter }: { authorsFilter: author[]; setAuthorsFilter: Dispatch<SetStateAction<author[]>> }) {
 	const [inputValue, setInputValue] = useState<string>('');
 	const [options, setOptions] = useState<author[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -31,7 +30,8 @@ export default function AutoCompleteAuthors({ authorsFilter, setAuthorsFilter }:
 				const res = await getAuthorsPaginate(inputValue, authorsFilter);
 
 				setOptions(res.data);
-			} catch (err: any) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			} catch (err : any){
 				setError(err.message);
 			} finally {
 				setLoading(false);
@@ -43,7 +43,7 @@ export default function AutoCompleteAuthors({ authorsFilter, setAuthorsFilter }:
 		} else {
 			setOptions([]);
 		}
-	}, [inputValue]);
+	}, [inputValue,authorsFilter]);
 
 	const handleSelect = (option: author) => {
 		if (!authorsFilter.some((o) => o.name_author === option.name_author)) {

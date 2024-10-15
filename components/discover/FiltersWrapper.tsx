@@ -4,6 +4,7 @@ import { Input } from "@nextui-org/input";
 import Link from "next/link";
 import AutoCompleteAuthors from "./AutoCompleteAuthors";
 import AutoCompleteSubjects from "./AutoCompleteSubjects";
+import { Dispatch, SetStateAction } from "react";
 
 interface author {
     id_author: number;
@@ -15,7 +16,7 @@ interface subject {
     label: string;
 }
 
-const FiltersWrapper = ({ fetchSearchData, bookNameFilter, setBookNameFilter, authorsFilter, setAuthorsFilter, subjectsFilter, setSubjectsFilter, publishYearFilter, setPublishYearFilter } : { fetchSearchData: any, bookNameFilter: string, setBookNameFilter: any, authorsFilter: author[], setAuthorsFilter: any, subjectsFilter: subject[], setSubjectsFilter: any, publishYearFilter: any, setPublishYearFilter: any }) => {
+const FiltersWrapper = ({ fetchSearchData, bookNameFilter, setBookNameFilter, authorsFilter, setAuthorsFilter, subjectsFilter, setSubjectsFilter, publishYearFilter, setPublishYearFilter } : { fetchSearchData: () => Promise<void>, bookNameFilter: string, setBookNameFilter: Dispatch<SetStateAction<string>>, authorsFilter: author[], setAuthorsFilter: Dispatch<SetStateAction<author[]>>, subjectsFilter: subject[], setSubjectsFilter:  Dispatch<SetStateAction<subject[]>>, publishYearFilter: string | undefined, setPublishYearFilter: Dispatch<SetStateAction<string | undefined>> }) => {
 
     const getSearchUrl = () => {
         let url = "/discover?";
@@ -41,7 +42,7 @@ const FiltersWrapper = ({ fetchSearchData, bookNameFilter, setBookNameFilter, au
         setPublishYearFilter("");
     }
 
-    const handleChangePublishYear = (e:any) => {
+    const handleChangePublishYear = (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent) => {
         ["e", "E", "+", "-"].includes(e.key) && e.preventDefault();
         e.key === "Enter" && document.getElementById("FilterButton")?.click()
     }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { Input } from '@nextui-org/input';
 import { Chip } from '@nextui-org/chip';
 import { Spinner } from '@nextui-org/spinner';
@@ -12,7 +12,7 @@ interface subject {
     label: string;
 }
 
-export default function AutoCompleteSubjects({ subjectsFilter, setSubjectsFilter }: { subjectsFilter: subject[]; setSubjectsFilter: any }) {
+export default function AutoCompleteSubjects({ subjectsFilter, setSubjectsFilter }: { subjectsFilter: subject[]; setSubjectsFilter: Dispatch<SetStateAction<subject[]>> }) {
 	const [inputValue, setInputValue] = useState<string>('');
 	const [options, setOptions] = useState<subject[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -26,6 +26,7 @@ export default function AutoCompleteSubjects({ subjectsFilter, setSubjectsFilter
 				const res = await getSubjectsPaginate(inputValue, subjectsFilter);
 
 				setOptions(res.data);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (err: any) {
 				setError(err.message);
 			} finally {
@@ -38,7 +39,7 @@ export default function AutoCompleteSubjects({ subjectsFilter, setSubjectsFilter
 		} else {
 			setOptions([]);
 		}
-	}, [inputValue]);
+	}, [inputValue,subjectsFilter]);
 
 	const handleSelect = (option: subject) => {
 		if (!subjectsFilter.some((o) => o.label === option.label)) {

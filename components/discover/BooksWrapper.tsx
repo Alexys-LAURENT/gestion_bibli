@@ -27,21 +27,50 @@ const BooksWrapper = () => {
     const [bookNameFilter, setBookNameFilter] = useState<string>(searchParams.get("bookName") || "");
     const [authorsFilter, setAuthorsFilter] = useState<author[]>(searchParams.getAll("authors")[0]?.split("|").map((author) => ({id_author: 0, name_author: author})) || []);
     const [subjectsFilter, setSubjectsFilter] = useState<subject[]>(searchParams.getAll("subjects")[0]?.split("|").map((subject) => ({id_subject: 0, label: subject})) || []);
-    const [publishYearFilter, setPublishYearFilter] = useState<any>(searchParams.get("publishYear") || undefined);
+    const [publishYearFilter, setPublishYearFilter] = useState<string | undefined>(searchParams.get("publishYear") || undefined);
 
-    const [selectedTab, setSelectedTab] = useState<any>(bookNameFilter || authorsFilter || subjectsFilter || publishYearFilter ? "search" : "for_you");
-    const [booksForYou, setBooksForYou] = useState<any>([]);
-    const [booksMostLoaned, setBooksMostLoaned] = useState<any>([]);
-
+    const [selectedTab, setSelectedTab] = useState<string>(bookNameFilter || authorsFilter || subjectsFilter || publishYearFilter ? "search" : "for_you");
+    const [booksForYou, setBooksForYou] = useState<{
+        authors:{name_author: string},
+        first_sentence: string,
+        id_book: number,
+        image_url: string,
+        is_loan: boolean,
+        title:string,
+        year_publication: number
+    }[]>([]);
+    
+    
+    
+    const [booksMostLoaned, setBooksMostLoaned] = useState<{
+        authors:{name_author: string,id_author:number},
+        first_sentence: string,
+        id_book: number,
+        image_url: string,
+        is_loan: boolean,
+        title:string,
+        year_publication: number
+    }[]>([]);
+    
     const [offsetForYou, setOffsetForYou] = useState<number>(0);
     const limitForYou = 50;
     const [lastPageForYou, setLastPageForYou] = useState<boolean>(false);
     const [offsetMostLoaned, setOffsetMostLoaned] = useState<number>(0);
     const limitMostLoaned = 50;
     const [lastPageMostLoaned, setLastPageMostLoaned] = useState<boolean>(false);
+    
+    
+    const [booksSearch, setBooksSearch] = useState<{
+        authors:{name_author: string,id_author:number},
+        first_sentence: string,
+        id_book: number,
+        image_url: string,
+        is_loan: boolean,
+        title:string,
+        year_publication: number
+    }[]>([]);
 
 
-    const [booksSearch, setBooksSearch] = useState<any>([]);
     const [offsetSearch, setOffsetSearch] = useState<number>(0);
     const [lastPageSearch, setLastPageSearch] = useState<boolean>(false);
     const limitSearch = 50;
@@ -64,10 +93,11 @@ const BooksWrapper = () => {
             }
         }
         getData();
-    }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const fetchSearchData = async () => {
-        const search = await getBooksSearchForYouPaginate(0, limitSearch, bookNameFilter, authorsFilter, subjectsFilter, publishYearFilter);
+        const search = await getBooksSearchForYouPaginate(0, limitSearch, bookNameFilter, authorsFilter, subjectsFilter, Number(publishYearFilter));
         setBooksSearch(search.data)
         setLastPageSearch(search.lastPage)
         setTimeout(() => {
@@ -90,14 +120,14 @@ const BooksWrapper = () => {
     }
 
     const handleFetchMoreSearch = async () => {
-        const res = await getBooksSearchForYouPaginate(offsetSearch, limitSearch, bookNameFilter, authorsFilter, subjectsFilter, publishYearFilter);
+        const res = await getBooksSearchForYouPaginate(offsetSearch, limitSearch, bookNameFilter, authorsFilter, subjectsFilter, Number(publishYearFilter));
         setOffsetSearch(offsetSearch + limitSearch);
         setBooksSearch([...booksSearch, ...res.data]);
         setLastPageSearch(res.lastPage);
     }
 
-    const handleTabChange = async (tab: any) => {
-        setSelectedTab(tab);
+    const handleTabChange = async (tab: React.Key) => {
+        setSelectedTab(tab as unknown as string);
         
         // reset offset and limit
         setOffsetForYou(50);
@@ -126,11 +156,11 @@ const BooksWrapper = () => {
                                 endMessage={booksForYou.length > 0 ? null : <p className="text-center w-full text-default-500">No books found</p>}
                             >
                             {
-                                booksForYou && booksForYou.map((book: any) => (
+                                booksForYou && booksForYou.map((book) => (
                                         <Link href={`/book/${book.id_book}`} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
                                             {book.image_url 
-                                                ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
-                                                : <Image src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                                                ? <Image loading="eager" src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
+                                                : <Image loading="eager" src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
                                             }
                                             <div className="flex flex-1 flex-col justify-between">
                                                 <p className="text-black font-bold line-clamp-2" title={book.title}>{book.title}</p>
@@ -153,7 +183,7 @@ const BooksWrapper = () => {
                                 scrollableTarget="scrollMostLoaned"
                                 endMessage={booksMostLoaned.length > 0 ? null : <p className="text-center w-full text-default-500">No books found</p>}
                             >
-                            {booksMostLoaned && booksMostLoaned.map((book: any) => (
+                            {booksMostLoaned && booksMostLoaned.map((book) => (
                                 <Link href={`/book/${book.id_book}`} key={`book-most-loaned-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
                                     {book.image_url 
                                         ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
@@ -180,7 +210,7 @@ const BooksWrapper = () => {
                                     scrollableTarget="scrollSearch"
                                     endMessage={booksSearch.length > 0 ? null : <p className="text-center w-full text-default-500">No books found for your search</p>}
                                 >
-                                {booksSearch && booksSearch.map((book: any) => (
+                                {booksSearch && booksSearch.map((book) => (
                                     <Link href={`/book/${book.id_book}`} key={`book-search-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
                                         {book.image_url 
                                             ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
