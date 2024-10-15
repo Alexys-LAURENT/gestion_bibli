@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import FiltersWrapper from "./FiltersWrapper";
 import { getBooksSearchForYouPaginate } from "@/utils/discover/getBooksSearchForYouPaginate";
 import { useSearchParams } from "next/navigation";
+import BookCard from "../BookCard";
 interface author {
     id_author: number;
     name_author: string;
@@ -141,7 +142,7 @@ const BooksWrapper = () => {
     }
 
     return (
-        <div className="flex w-full h-full gap-4">
+        <div className="flex-col-reverse md:flex-row flex w-full h-full gap-4">
             <div className="h-full flex flex-col w-full bg-white rounded-md p-4 gap-4 overflow-hidden">
                 <Tabs aria-label="Options" classNames={{cursor: "bg-gest_cta", panel:'w-full h-[calc(100%-50px)]' }} selectedKey={selectedTab} onSelectionChange={(tab) => handleTabChange(tab)}>
                     <Tab key="for_you" title="For You">
@@ -157,16 +158,7 @@ const BooksWrapper = () => {
                             >
                             {
                                 booksForYou && booksForYou.map((book) => (
-                                        <Link href={`/book/${book.id_book}`} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-100 rounded-md p-2 transition-colors duration-200">
-                                            {book.image_url 
-                                                ? <Image loading="eager" src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
-                                                : <Image loading="eager" src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
-                                            }
-                                            <div className="flex flex-1 flex-col justify-between">
-                                                <p className="text-black font-bold line-clamp-2" title={book.title}>{book.title}</p>
-                                                <p className="text-default-500 text-sm">{book.authors.name_author}</p>
-                                            </div>
-                                        </Link>
+                                        <BookCard book={book} key={`${book.id_book}`}/>
                                 ))
                             }
                             </InfiniteScroll>
@@ -228,7 +220,7 @@ const BooksWrapper = () => {
                     }
                 </Tabs>
             </div>
-          <div className="h-full flex min-w-[300px] max-w-[300px] bg-white rounded-md">
+          <div className="h-full flex min-w-[300px] md:max-w-[300px] bg-white rounded-md">
             <FiltersWrapper fetchSearchData={fetchSearchData} bookNameFilter={bookNameFilter} setBookNameFilter={setBookNameFilter} authorsFilter={authorsFilter} setAuthorsFilter={setAuthorsFilter} subjectsFilter={subjectsFilter} setSubjectsFilter={setSubjectsFilter} publishYearFilter={publishYearFilter} setPublishYearFilter={setPublishYearFilter} />
           </div>
         </div>

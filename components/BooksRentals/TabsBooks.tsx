@@ -1,19 +1,13 @@
 "use client"
 import { Tabs, Tab } from "@nextui-org/react";
 import DisplayBooks from "./DisplayBooks";
+import { Book } from "@/types/HomePage/entities";
 
 interface TabsBooksProps {
-  booksOnDoing: book[];
-  booksDone: book[];
+  booksOnDoing: Book[];
+  booksDone: Book[];
 }
 
-type book = {
-  authors: { name_author: string };
-  id_author: number;
-  id_book: number;
-  image_url: string | null;
-  title: string;
-}
 
 // Exemple d'utilisation de l'interface BooksArg mise à jour dans TabsBooks
 const TabsBooks = ({ booksOnDoing, booksDone }: TabsBooksProps) => {
