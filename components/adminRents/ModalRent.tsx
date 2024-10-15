@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/button';
 import {  Autocomplete,  AutocompleteItem} from "@nextui-org/autocomplete";
@@ -9,6 +9,7 @@ import { getAllusersLike } from '@/utils/Admin Pages/getAllUsersLike';
 import {DateInput} from "@nextui-org/date-input";
 import {DateValue, parseDate} from "@internationalized/date";
 import { createRent } from '@/utils/Admin Pages/createRent';
+import { ToastContext } from '@/contexts/ToastContext';
 
 
 const Modal = dynamic(() => import('@nextui-org/modal').then((mod) => mod.Modal));
@@ -25,6 +26,7 @@ export default function ModalRent({
   onOpenChange: (open: boolean) => void;
 }) {
   const router = useRouter()
+  const {customToast} = useContext(ToastContext)
   const [autoCompleteBooksValue, setAutoCompleteBooksValue] = useState<string>('');
   const [autoCompleteUserValue, setAutoCompleteUserValue] = useState<string>('');
   const [idSelectedBook, setIdSelectedBook] = useState<number>(0);
@@ -64,13 +66,13 @@ export default function ModalRent({
     setIsLoading(true);
     const newRentResult = await createRent(idSelectedBook, idSelectedUser, value.toString());
     if(newRentResult.error){
-      alert('An error occurred while creating the rent');
+      customToast.error('An error occurred while creating the rent');
       console.error(newRentResult.message);
       setIsLoading(false);
       router.refresh();
       return;
     }
-    alert('Rent created successfully');
+    customToast.success('Rent created successfully');
     setIsLoading(false);
     onClose();
     router.refresh();

@@ -1,13 +1,16 @@
 "use client"
 
+import { ToastContext } from "@/contexts/ToastContext";
 import { createRent } from "@/utils/Admin Pages/createRent";
 import { toggleIsLoan } from "@/utils/toggleIsLoan";
 import { Button } from "@nextui-org/button";
 import { Session } from "next-auth";
 import { redirect, useRouter } from "next/navigation";
+import { useContext } from "react";
 
 const RentButton = ({session, is_loan, loan_data, id_book}:{session:Session|null, is_loan:boolean, loan_data:{id_user:number}[], id_book:number}) => {
   const router = useRouter();    
+  const {customToast} = useContext(ToastContext)
 
   const showText = () => {
     if(is_loan){
@@ -23,7 +26,7 @@ const RentButton = ({session, is_loan, loan_data, id_book}:{session:Session|null
 
   const toggleIsRented = async () => {
     if(!session?.user.id_user){
-      alert('You need to be logged in to rent a book');
+      customToast.error('You need to be logged in to rent a book');
       return redirect('/login');
     }
 
@@ -31,10 +34,10 @@ const RentButton = ({session, is_loan, loan_data, id_book}:{session:Session|null
       const newLoan = await toggleIsLoan(id_book, parseInt(session?.user.id_user));
       
       if(newLoan.error){
-        return alert('An error occured');
+        customToast.error('An error occured');
+        return
       }
-      
-      alert('Action done successfully');
+      customToast.success('Action done successfully');
       router.refresh();
       return;
     }
@@ -42,10 +45,10 @@ const RentButton = ({session, is_loan, loan_data, id_book}:{session:Session|null
     const newLoan = await createRent(id_book, parseInt(session?.user.id_user), new Date().toISOString());
 
     if(newLoan.error){
-      return alert('An error occured');
+      customToast.error('An error occured');
+      return 
     }
-
-    alert('Action done successfully');
+    customToast.success('Action done successfully');
     router.refresh();
     return;
   }

@@ -1,6 +1,6 @@
 'use client';
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from '@nextui-org/table';
-import {  useCallback, useEffect, useMemo, useState } from 'react';
+import {  useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import {  LoanType } from '@/types/AdminPages/entities';
 import {Pagination} from "@nextui-org/pagination";
@@ -18,6 +18,9 @@ import { getAllRentsPaginate } from '@/utils/Admin Pages/getAllRentsPaginate';
 import { Chip } from '@nextui-org/chip';
 import moment from 'moment';
 import { toggleIsLoan } from '@/utils/toggleIsLoan';
+import placeholderImg from '@/public/placeholder.png';
+import { ToastContext } from '@/contexts/ToastContext';
+
 const TableauRents = ({
   initialRents,
   initialTotal,
@@ -37,6 +40,9 @@ const TableauRents = ({
   const [selectedKeys, setSelectedKeys] = useState<Set<string> | string>(new Set([]));
   // documents to display
   const [rents, setRents] = useState(initialRents);
+
+  const {customToast} = useContext(ToastContext)
+
   // page number
   const [page, setPage] = useState(1);
   // search input value
@@ -185,20 +191,20 @@ const TableauRents = ({
         const updatedLoan = await toggleIsLoan(id_book, id_user);
 
         if(updatedLoan.error){
-          alert('An error occurred while updating the rent');
+          customToast.error('An error occurred while updating the rent');
           console.error('TableauRents', updatedLoan.message);
           // customToast.error('Une erreur est survenue lors de la mise à jour du document.');
           return;
         }
-
-        alert('Rent updated successfully');
+        customToast.success('Rent updated successfully');
       // customToast.success(message);
       router.refresh();
     } catch (error) {
-      alert('An error occurred while updating the rent');
+      customToast.error('An error occurred while updating the rent');
       console.error('TableauRents', error);
       // customToast.error('Une erreur est survenue lors de la suppression des documents. lala');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   // top content of table
@@ -260,13 +266,12 @@ const TableauRents = ({
             </div>
           );
         case 'books.image_url':
-          return cellValue ? (
+          return (
+
             <div className="flex  justify-center items-center">
-              <Image priority={true} src={loan.books.image_url} alt={`${loan.books.title} - cover`} width={200} height={300} className="w-16 h-auto rounded-md" />
+              <Image priority={true} src={loan.books.image_url || placeholderImg.src} alt={`${loan.books.title} - cover`} width={200} height={300} className="w-16 h-auto rounded-md" />
             </div>
-          ) : (
-            <div className="flex  justify-center items-center">-</div>
-          );
+            )
 
         default:
           return (

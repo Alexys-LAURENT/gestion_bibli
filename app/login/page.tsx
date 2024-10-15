@@ -3,17 +3,19 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import Image from "next/image";
 import Logo from '@/assets/logo.png';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { ToastContext } from "@/contexts/ToastContext";
 const Page = () => {
+  const {customToast} = useContext(ToastContext)
   const [form, setform] = useState({
     email: "",
     password: "",
   })
 
   const handleSubmit = async () => {
-    if(!form.email || !form.password) return alert('Please fill in all fields');
+    if(!form.email || !form.password) return customToast.error('Please fill in all fields');
     signIn('credentials', {
       email: form.email,
       password: form.password,

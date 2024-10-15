@@ -3,13 +3,15 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import Image from "next/image";
 import Logo from '@/assets/logo.png';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { registerUser } from "@/utils/registerUser";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { DateInput } from "@nextui-org/date-input";
 import {DateValue} from "@internationalized/date";
+import { ToastContext } from "@/contexts/ToastContext";
 const Page = () => {
+  const {customToast} = useContext(ToastContext)
   const [form, setform] = useState({
     mail: "",
     password: "",
@@ -25,31 +27,31 @@ const Page = () => {
   const handleSubmitRegister = async () => {
     // if one is missing, return and alert
     if (is_disabled()) {
-      alert('Missing data');
+      customToast.error('Missing data');
       return;
     }
 
     // if email is not valid, return and alert
     if (form.mail && !form.mail.includes('@')) {
-      alert('Email is not valid');
+      customToast.error('Email is not valid');
       return;
     }
 
     // if password is less than 6 characters, return and alert
     if (form.password && form.password.length < 6) {
-      alert('Password must be at least 6 characters long');
+      customToast.error('Password must be at least 6 characters long');
       return;
     }
 
     // if birth_date is in future, return and alert
     if (form.birth_date && new Date(form.birth_date.toString()) > new Date()) {
-      alert('Birth date cannot be in future');
+      customToast.error('Birth date cannot be in future');
       return;
     }
 
     // if birthdate is less dans 8 years ago, return and alert
     if (form.birth_date && new Date(form.birth_date.toString()) > new Date(new Date().setFullYear(new Date().getFullYear() - 8))) {
-      alert('You must be at least 8 years old');
+      customToast.error('You must be at least 8 years old');
       return;
     }
 
@@ -66,11 +68,11 @@ const Page = () => {
     });
 
     if (newUser.error) {
-      alert('Error');
+      customToast.error('Error');
       return;
     }
     if (newUser.success) {
-      alert('Success');
+      customToast.success('Success');
       return signIn('credentials', {
         email: form.mail,
         password: form.password,

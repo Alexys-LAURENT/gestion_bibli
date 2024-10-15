@@ -1,16 +1,12 @@
 'use client';
-// import { ToastContext } from '@/contexts/ToastContext';
-// import { deleteAllWhere } from '@/utils/database/deleteAllWhere';
+
+
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
-// import { Button, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Pagination, Spinner } from '@nextui-org/react';
+import placeholderImg from '@/public/placeholder.png';
+
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from '@nextui-org/table';
-// import { useRouter } from 'next/navigation';
-import {  useCallback, useEffect, useMemo, useState } from 'react';
-// import { useDisclosure } from '@nextui-org/react';
-// import ModalDocument from './ModalDocument';
-// import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
-// import { updateRowWhere } from '@/utils/database/updateRowWhere';
-// import { selectWhere } from '@/utils/database/selectWhere';
+
+import {  useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import {  BookTypeWithAuthor } from '@/types/AdminPages/entities';
 import {Pagination} from "@nextui-org/pagination";
@@ -27,6 +23,7 @@ import {
 } from "@nextui-org/modal";
 import { deleteBook } from '@/utils/Admin Pages/deleteBook';
 import { useRouter } from 'next/navigation';
+import { ToastContext } from '@/contexts/ToastContext';
 const TableauBooks = ({
   initalBooks,
   initialTotal,
@@ -55,6 +52,8 @@ const TableauBooks = ({
       name_author: '',
     },
   });
+  const {customToast} = useContext(ToastContext)
+
   // modal action
   const [modalAction, setModalAction] = useState<'edit' | 'add'>('edit');
   // selected documents in table
@@ -212,13 +211,14 @@ const openModal = useCallback((action: 'edit' | 'add', data: BookTypeWithAuthor)
       }
       await Promise.all(allPromises);
       const message = ids === 'all' || ids.length > 1 ? 'Books deleted.' : 'Book deleted.';
-      alert(message);
+      customToast.success(message);
       // customToast.success(message);
       router.refresh();
     } catch (error) {
       console.error('TableauBddIA', error);
       // customToast.error('Une erreur est survenue lors de la suppression des documents. lala');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [books, router]);
 
   // top content of table
@@ -301,13 +301,11 @@ const openModal = useCallback((action: 'edit' | 'add', data: BookTypeWithAuthor)
           );
 
         case 'image_url':
-          return book[columnKey] ? (
-            <div className="flex  justify-center items-center">
-              <Image priority={true} src={book[columnKey]} alt={`${book.title} - cover`} width={200} height={300} className="w-16 h-auto rounded-md" />
-            </div>
-          ) : (
-            <div className="flex  justify-center items-center">-</div>
-          );
+          return (
+            <div className="flex justify-start items-center">
+            <Image priority={true} src={book.image_url || placeholderImg.src} alt={`${book.title} - cover`} width={200} height={300} className="w-16 h-auto rounded-md" />
+          </div>
+          )
         case 'authors':
           return (
             <div className="flex  justify-center items-center">

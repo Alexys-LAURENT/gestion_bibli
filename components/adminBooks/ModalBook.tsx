@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/button';
 import { AuthorType, BookTypeWithAuthor } from '@/types/AdminPages/entities';
@@ -9,6 +9,7 @@ import { getAllAuthorsLike } from '@/utils/getAllAuthorsLike';
 import { updateBook } from '@/utils/Admin Pages/updateBook';
 import { addNewBook } from '@/utils/Admin Pages/addNewBook';
 import React from 'react';
+import { ToastContext } from '@/contexts/ToastContext';
 
 const Modal = dynamic(() => import('@nextui-org/modal').then((mod) => mod.Modal));
 const ModalContent = dynamic(() => import('@nextui-org/modal').then((mod) => mod.ModalContent));
@@ -28,6 +29,7 @@ export default function ModalBook({
   modalData: BookTypeWithAuthor;
 }) {
   const router = useRouter()
+  const {customToast} = useContext(ToastContext)
   const [autoCompleteValue, setAutoCompleteValue] = useState<string>(modalData.authors?.name_author || '');
   const [authors, setAuthors] = useState<AuthorType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,14 +79,14 @@ export default function ModalBook({
       if(updatedBook.error){
         setIsLoading(false);
         console.error(updatedBook.message);
-        alert('An error occurred');
+        customToast.error('An error occurred');
         onClose();
         reset_data();
         router.refresh();
         return;
       }
       setIsLoading(false);
-      alert('Book updated');
+      customToast.success('Book updated');
       onClose();
       reset_data();
       router.refresh();
@@ -94,14 +96,14 @@ export default function ModalBook({
       if(newBook.error){
         setIsLoading(false);
         console.error(newBook.message);
-        alert('An error occurred');
+        customToast.error('An error occurred');
         onClose();
         reset_data();
         router.refresh();
         return;
       }
       setIsLoading(false);
-      alert('Book added');
+      customToast.success('Book added');
       onClose();
       reset_data();
       router.refresh();
