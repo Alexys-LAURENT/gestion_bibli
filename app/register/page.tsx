@@ -29,6 +29,30 @@ const Page = () => {
       return;
     }
 
+    // if email is not valid, return and alert
+    if (form.mail && !form.mail.includes('@')) {
+      alert('Email is not valid');
+      return;
+    }
+
+    // if password is less than 6 characters, return and alert
+    if (form.password && form.password.length < 6) {
+      alert('Password must be at least 6 characters long');
+      return;
+    }
+
+    // if birth_date is in future, return and alert
+    if (form.birth_date && new Date(form.birth_date.toString()) > new Date()) {
+      alert('Birth date cannot be in future');
+      return;
+    }
+
+    // if birthdate is less dans 8 years ago, return and alert
+    if (form.birth_date && new Date(form.birth_date.toString()) > new Date(new Date().setFullYear(new Date().getFullYear() - 8))) {
+      alert('You must be at least 8 years old');
+      return;
+    }
+
     const newUser = await registerUser({
       mail: form.mail,
       password: form.password,

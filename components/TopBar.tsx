@@ -19,7 +19,9 @@ const TopBar = async () => {
           <Popover placement="bottom">
           <PopoverTrigger>
             {/* <Button>Open Popover</Button> */}
-          <div className='h-10 w-10 bg-blue-500 rounded-full'></div>
+          <div className='h-10 w-10 cursor-pointer rounded-full'>
+            <Image src={'https://i0.wp.com/sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png?ssl=1'} alt='Avatar' quality={100} width={100} height={100} className='h-10 w-10 rounded-full' />
+          </div>
 
           </PopoverTrigger>
           <PopoverContent>
