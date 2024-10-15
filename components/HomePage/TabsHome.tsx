@@ -6,7 +6,7 @@ import {Tabs, Tab} from "@nextui-org/tabs";
 const TabsHome = ({mostReservedBooks,forYouBooks}:{mostReservedBooks:Book[],forYouBooks:Book[]}) => {
     return (
         <Tabs classNames={{cursor:"bg-gest_cta", tab:`text-white`}} variant="light" aria-label="Options colors">
-            <Tab key="foryou" title="For You" >
+            <Tab key="featured" title="Featured" >
                 <DisplayBooks books={forYouBooks}/>
             </Tab>
             <Tab key="mostreservedbooks" title="Most reserved books" >
