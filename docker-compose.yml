@@ -14,10 +14,10 @@ services:
             - web
         labels:
             - 'traefik.enable=true'
-            - 'traefik.http.routers.gestbibli.rule=Host(`gest-bibli.projets-al.site`)'
-            - 'traefik.http.routers.gestbibli.entrypoints=websecure'
-            - 'traefik.http.services.gestbibli.loadbalancer.server.port=3000'
-            - 'traefik.http.routers.gestbibli.tls.certresolver=myresolver'
+            - 'traefik.http.routers.gest-bibli.rule=Host(`gest-bibli.projets-al.site`)'
+            - 'traefik.http.routers.gest-bibli.entrypoints=websecure'
+            - 'traefik.http.services.gest-bibli.loadbalancer.server.port=3000'
+            - 'traefik.http.routers.gest-bibli.tls.certresolver=myresolver'
             - 'traefik.docker.network=web'
 
 networks:
