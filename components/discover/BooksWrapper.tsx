@@ -57,7 +57,7 @@ const BooksWrapper = () => {
     const [lastPageForYou, setLastPageForYou] = useState<boolean>(false);
     const [offsetMostLoaned, setOffsetMostLoaned] = useState<number>(0);
     const limitMostLoaned = 50;
-    const [lastPageMostLoaned, setLastPageMostLoaned] = useState<boolean>(false);
+    // const [lastPageMostLoaned, setLastPageMostLoaned] = useState<boolean>(false);
     
     
     const [booksSearch, setBooksSearch] = useState<{
@@ -86,7 +86,7 @@ const BooksWrapper = () => {
             const most_loaned = await getBooksDiscoverMostLoanedPaginate(offsetMostLoaned, limitMostLoaned);
             setBooksMostLoaned(most_loaned.data)
             setOffsetMostLoaned(offsetMostLoaned + limitMostLoaned);
-            setLastPageMostLoaned(most_loaned.lastPage);
+            // setLastPageMostLoaned(most_loaned.lastPage);
 
             if (bookNameFilter || authorsFilter || subjectsFilter || publishYearFilter) {
                 fetchSearchData();
@@ -112,12 +112,12 @@ const BooksWrapper = () => {
         setLastPageForYou(res.lastPage);
     }
 
-    const handleFetchMoreMostLoaned = async () => {
-        const res = await getBooksDiscoverMostLoanedPaginate(offsetMostLoaned, limitMostLoaned);
-        setOffsetMostLoaned(offsetMostLoaned + limitMostLoaned);
-        setBooksMostLoaned([...booksMostLoaned, ...res.data]);
-        setLastPageMostLoaned(res.lastPage);
-    }
+    // const handleFetchMoreMostLoaned = async () => {
+    //     const res = await getBooksDiscoverMostLoanedPaginate(offsetMostLoaned, limitMostLoaned);
+    //     setOffsetMostLoaned(offsetMostLoaned + limitMostLoaned);
+    //     setBooksMostLoaned([...booksMostLoaned, ...res.data]);
+    //     setLastPageMostLoaned(res.lastPage);
+    // }
 
     const handleFetchMoreSearch = async () => {
         const res = await getBooksSearchForYouPaginate(offsetSearch, limitSearch, bookNameFilter, authorsFilter, subjectsFilter, Number(publishYearFilter));
@@ -157,7 +157,7 @@ const BooksWrapper = () => {
                             >
                             {
                                 booksForYou && booksForYou.map((book) => (
-                                        <Link href={`/book/${book.id_book}`} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
+                                        <Link href={`/book/${book.id_book}`} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-100 rounded-md p-2 transition-colors duration-200">
                                             {book.image_url 
                                                 ? <Image loading="eager" src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
                                                 : <Image loading="eager" src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
@@ -172,7 +172,7 @@ const BooksWrapper = () => {
                             </InfiniteScroll>
                         </div>
                     </Tab>
-                    <Tab key="most_loaned" title="Most loaned">
+                    {/* <Tab key="most_loaned" title="Most loaned">
                         <div id="scrollMostLoaned" className="w-full h-full overflow-y-auto">
                             <InfiniteScroll
                                 dataLength={booksMostLoaned.length}
@@ -184,7 +184,7 @@ const BooksWrapper = () => {
                                 endMessage={booksMostLoaned.length > 0 ? null : <p className="text-center w-full text-default-500">No books found</p>}
                             >
                             {booksMostLoaned && booksMostLoaned.map((book) => (
-                                <Link href={`/book/${book.id_book}`} key={`book-most-loaned-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
+                                <Link href={`/book/${book.id_book}`} key={`book-most-loaned-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-100 rounded-md p-2 transition-colors duration-200">
                                     {book.image_url 
                                         ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
                                         : <Image src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
@@ -197,7 +197,7 @@ const BooksWrapper = () => {
                             ))}
                             </InfiniteScroll>
                         </div>
-                    </Tab>
+                    </Tab> */}
                     {searchParams.size > 0 &&
                         <Tab key="search" title="Search">
                             <div id="scrollSearch" className="w-full h-full overflow-y-auto">
@@ -211,7 +211,7 @@ const BooksWrapper = () => {
                                     endMessage={booksSearch.length > 0 ? null : <p className="text-center w-full text-default-500">No books found for your search</p>}
                                 >
                                 {booksSearch && booksSearch.map((book) => (
-                                    <Link href={`/book/${book.id_book}`} key={`book-search-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
+                                    <Link href={`/book/${book.id_book}`} key={`book-search-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-100 rounded-md p-2 transition-colors duration-200">
                                         {book.image_url 
                                             ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
                                             : <Image src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 

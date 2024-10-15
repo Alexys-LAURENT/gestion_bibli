@@ -18,7 +18,7 @@ export default function DisplayBooks({ books, emptyMessage }: {books:Book[], emp
             {/* Vérifie si des livres sont présents */}
             {books && books.length > 0 ? (
                 books.map((book) => (
-                    <Link href={`/book/${book.id_book}`} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-200 rounded-md p-2 transition-colors duration-200">
+                    <Link href={`/book/${book.id_book}`} key={`book-for-you-${book.id_book}`} className="flex flex-col gap-4 w-[180px] hover:bg-neutral-100 rounded-md p-2 transition-colors duration-200">
                         {book.image_url 
                             ? <Image src={book.image_url} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
                             : <Image src={placeholderImg.src} alt={book.title} className="w-full h-[250px] object-cover rounded-md" width={180} height={250}/> 
