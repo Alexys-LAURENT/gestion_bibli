@@ -63,14 +63,16 @@ const SideBar = ({session}:{session:Session|null}) => {
         links.map((link, index) => (
           link.needLogedIn === true ? 
           ( 
-            session?.user.id_user ? ( <Button
+            session?.user.id_user ? ( 
+            <Button
               as={Link}
               key={`
               ${index}-${link.name}-${link.href}
-              `} href={link.href} className={`w-full justify-center sm:justify-start rounded-lg bg-transparent hover:bg-gest_cta data-[hover=true]:text-white data-[hover=true]:opacity-100 ${pathName === link.href ? 'bg-gest_cta text-white' : ''} `}>
+              `} href={link.href} className={`w-full justify-center sm:justify-start rounded-lg bg-transparent hover:bg-gest_cta data-[hover=true]:text-white data-[hover=true]:opacity-100 ${pathName === link.href ? 'bg-gest_cta text-white' : ''} ${(link.href === '/my-books-rentals' && session.user.is_admin === true) ? 'hidden' : ''} `}>
                 {link.icon}
                 <span className='font-semibold ml-1 hidden sm:block'>{link.name}</span>
-              </Button>) : (
+              </Button>
+              ) : (
                 <></>
               )
             

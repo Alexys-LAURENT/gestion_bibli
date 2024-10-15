@@ -15,6 +15,10 @@ export default withAuth(
 			return NextResponse.redirect(new URL('/home', req.url));
 		}
 
+		if (loggedUser && loggedUser.is_admin && (req.nextUrl.pathname === '/my-books-rentals')) {
+			return NextResponse.redirect(new URL('/home', req.url));
+		}
+
 		if (!loggedUser?.is_admin && (req.nextUrl.pathname.startsWith('/admin'))) {
 			return NextResponse.redirect(new URL('/home', req.url));
 		}
