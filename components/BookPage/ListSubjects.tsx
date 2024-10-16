@@ -9,7 +9,7 @@ const ListSubjects = ({ books_subjects }: { books_subjects: { subjects: { label:
   const displayedSubjects = showAll ? books_subjects : books_subjects.slice(0, 20);
 
   return (
-    <div className="mb-6 flex flex-wrap gap-2">
+    <div className="mb-6 flex flex-wrap gap-2 max-h-[300px] overflow-y-auto">
       {displayedSubjects.length > 0 && displayedSubjects.map((subject: { subjects: { label: string } }, index: number) => (
         <Chip
           size='sm'
