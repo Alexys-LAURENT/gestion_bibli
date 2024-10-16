@@ -37,7 +37,7 @@ const RentButton = ({session, is_loan, loan_data, id_book}:{session:Session|null
         customToast.error('An error occured');
         return
       }
-      customToast.success('Action done successfully');
+      customToast.success('Book returned successfully');
       router.refresh();
       return;
     }
@@ -48,7 +48,7 @@ const RentButton = ({session, is_loan, loan_data, id_book}:{session:Session|null
       customToast.error('An error occured');
       return 
     }
-    customToast.success('Action done successfully');
+    customToast.success('Book rented successfully');
     router.refresh();
     return;
   }
