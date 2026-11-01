@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+    gest_bibli:
+        container_name: gest-bibli
+        restart: always
+        build:
+            context: .
+            dockerfile: dockerFile
+        # ports:
+        #     - 8083:3000
+        networks:
+            - internal
+            - web
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.gest-bibli.rule=Host(`gest-bibli.projets-al.site`)'
+            - 'traefik.http.routers.gest-bibli.entrypoints=websecure'
+            - 'traefik.http.services.gest-bibli.loadbalancer.server.port=3000'
+            - 'traefik.http.routers.gest-bibli.tls.certresolver=myresolver'
+            - 'traefik.docker.network=web'
+
+networks:
+    web:
+        external:
+            name: web
+    internal:
